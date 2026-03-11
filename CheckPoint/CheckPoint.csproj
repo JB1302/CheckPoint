@@ -178,7 +178,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Models\AuditLogs\" />
+    <Folder Include="Models\Comments\" />
+    <Folder Include="Models\EventRules\" />
+    <Folder Include="Models\Events\" />
+    <Folder Include="Models\Games\" />
+    <Folder Include="Models\Notifications\" />
+    <Folder Include="Models\Posts\" />
+    <Folder Include="Models\Profiles\" />
+    <Folder Include="Models\Reactions\" />
+    <Folder Include="Models\Registrations\" />
+    <Folder Include="Models\Reports\" />
+    <Folder Include="Models\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
