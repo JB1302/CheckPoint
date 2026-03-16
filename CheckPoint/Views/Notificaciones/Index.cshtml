@@ -1,0 +1,45 @@
+@using CheckPoint.Models
+@model List<Notificacion>
+@{
+    ViewData["Title"] = "Notificaciones";
+    var unread = Model.Count(n => !n.IsRead);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="text-warning mb-0">Notificaciones @(unread > 0 ? $"({unread} nuevas)" : "")</h3>
+    @if (unread > 0)
+    {
+        <form asp-action="MarkAllRead" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Marcar todas como leídas</button>
+        </form>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <p class="text-secondary text-center py-5">No tienes notificaciones.</p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var n in Model)
+        {
+            <div class="list-group-item list-group-item-action bg-dark border-secondary @(!n.IsRead ? "border-start border-warning border-3" : "")">
+                <div class="d-flex justify-content-between">
+                    <strong class="text-light">@n.Title</strong>
+                    <small class="text-secondary">@n.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
+                <p class="mb-1 text-secondary small">@n.Message</p>
+                @if (!n.IsRead)
+                {
+                    <form asp-action="MarkRead" asp-route-id="@n.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-link text-warning p-0">Marcar como leída</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+}
+

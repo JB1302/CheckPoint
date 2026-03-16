@@ -1,0 +1,41 @@
+@model CheckPoint.ViewModels.IniciarSesionViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card bg-dark border-secondary mt-4">
+            <div class="card-body p-4">
+                <h3 class="card-title text-warning mb-4">Iniciar sesión</h3>
+                <form asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label text-light"></label>
+                        <input asp-for="Email" class="form-control bg-dark text-light border-secondary" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label text-light"></label>
+                        <input asp-for="Password" class="form-control bg-dark text-light border-secondary" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label text-secondary"></label>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">Entrar</button>
+                </form>
+                <p class="text-center text-secondary mt-3 small">
+                    ¿Sin cuenta? <a asp-action="Register" class="text-warning">Regístrate</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

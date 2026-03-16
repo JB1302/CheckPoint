@@ -1,0 +1,69 @@
+@using CheckPoint.Models
+@model List<Evento>
+@{
+    ViewData["Title"] = "Eventos";
+    var games = ViewBag.Games as List<Juego> ?? new();
+}
+
+<h2 class="text-warning mb-4">Eventos</h2>
+
+<!-- Filtros de busqueda -->
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="q" value="@ViewBag.Query" class="form-control bg-dark text-light border-secondary" placeholder="Buscar evento..." />
+    </div>
+    <div class="col-md-3">
+        <select name="game" class="form-select bg-dark text-light border-secondary">
+            <option value="">Todos los juegos</option>
+            @foreach (var g in games)
+            {
+                <option value="@g.Id" selected="@(ViewBag.SelectedGame == g.Id ? "selected" : null)">@g.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="type" class="form-select bg-dark text-light border-secondary">
+            <option value="">Cualquier modalidad</option>
+            <option value="Online" selected="@(ViewBag.SelectedType == "Online" ? "selected" : null)">Online</option>
+            <option value="InPerson" selected="@(ViewBag.SelectedType == "InPerson" ? "selected" : null)">Presencial</option>
+            <option value="Hybrid" selected="@(ViewBag.SelectedType == "Hybrid" ? "selected" : null)">Híbrido</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-warning w-100">Buscar</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="text-center text-secondary py-5">
+        <p>No se encontraron eventos con los filtros aplicados.</p>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col">
+                <div class="card h-100 bg-dark border-secondary">
+                    <img src="@ev.ImageUrl" class="card-img-top" style="height:150px;object-fit:cover" onerror="this.src='/img/default-event.png'">
+                    <div class="card-body">
+                        <div class="d-flex gap-1 mb-2">
+                            <span class="badge bg-warning text-dark">@ev.Type</span>
+                            <span class="badge bg-secondary">@ev.Status</span>
+                        </div>
+                        <h5 class="card-title text-light">@ev.Title</h5>
+                        <p class="card-text text-secondary small">@(ev.Description.Length > 90 ? ev.Description[..90] + "..." : ev.Description)</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <small class="text-secondary">@ev.StartDate.ToString("dd MMM yyyy")</small>
+                        <small class="text-secondary">Participantes: @ev.CurrentParticipants/@ev.MaxParticipants</small>
+                        <a asp-controller="Eventos" asp-action="Details" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-warning">Detalles</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+

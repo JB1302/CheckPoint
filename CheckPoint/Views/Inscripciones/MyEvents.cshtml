@@ -1,0 +1,42 @@
+@using CheckPoint.Models
+@model List<Evento>
+@{
+    ViewData["Title"] = "Mis Eventos";
+    var registrations = ViewBag.Registrations as List<Inscripcion> ?? new();
+}
+
+<h3 class="text-warning mb-4">Mis Eventos</h3>
+
+@if (!Model.Any())
+{
+    <p class="text-secondary text-center py-5">
+        Aún no te has inscrito a ningún evento.
+        <a asp-controller="Eventos" asp-action="Index" class="text-warning">Explorar eventos</a>
+    </p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var ev in Model)
+        {
+            var reg = registrations.FirstOrDefault(r => r.EventId == ev.Id);
+            <a asp-controller="Eventos" asp-action="Details" asp-route-id="@ev.Id"
+               class="list-group-item list-group-item-action bg-dark border-secondary">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1 text-light">@ev.Title</h6>
+                        <small class="text-secondary">@ev.StartDate.ToString("dd/MM/yyyy") - @ev.Type</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge @(ev.Status == "Open" ? "bg-success" : ev.Status == "Completed" ? "bg-secondary" : "bg-danger")">@ev.Status</span>
+                        @if (reg != null)
+                        {
+                            <br /><small class="text-secondary">Inscripción: @reg.Status</small>
+                        }
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}
+

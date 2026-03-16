@@ -1,0 +1,54 @@
+@model CheckPoint.ViewModels.RegistroViewModel
+@{
+    ViewData["Title"] = "Registrarse";
+}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card bg-dark border-secondary mt-4">
+            <div class="card-body p-4">
+                <h3 class="card-title text-warning mb-4">Crear cuenta</h3>
+                <form asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label text-light"></label>
+                        <input asp-for="Username" class="form-control bg-dark text-light border-secondary" />
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label text-light"></label>
+                        <input asp-for="Email" class="form-control bg-dark text-light border-secondary" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label text-light"></label>
+                        <input asp-for="Password" class="form-control bg-dark text-light border-secondary" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label text-light"></label>
+                        <input asp-for="ConfirmPassword" class="form-control bg-dark text-light border-secondary" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Role" class="form-label text-light"></label>
+                        <select asp-for="Role" class="form-select bg-dark text-light border-secondary">
+                            <option value="Usuario">Jugador</option>
+                            <option value="Organizer">Organizador</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">Crear cuenta</button>
+                </form>
+                <p class="text-center text-secondary mt-3 small">
+                    ¿Ya tienes cuenta? <a asp-action="Login" class="text-warning">Inicia sesión</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
