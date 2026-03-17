@@ -1,0 +1,77 @@
+﻿@using CheckPoint.Models.Events
+@model List<Events>
+
+@{
+    ViewData["Title"] = "Eventos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <span class="cp-kicker">Competencias</span>
+        <h2 class="text-warning mb-1">Eventos</h2>
+        <p class="text-secondary mb-0">Explora los eventos disponibles en la plataforma.</p>
+    </div>
+
+    <a asp-controller="Events" asp-action="Create" class="btn btn-warning">
+        Crear evento
+    </a>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="card bg-dark border-secondary shadow-sm">
+        <div class="card-body text-center py-5">
+            <p class="text-secondary mb-3">No hay eventos registrados por el momento.</p>
+            <a asp-controller="Events" asp-action="Create" class="btn btn-warning">Crear primer evento</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col">
+                <div class="card h-100 bg-dark border-secondary shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-warning text-dark">@ev.EventType</span>
+                            <span class="badge bg-secondary">@ev.Status</span>
+                        </div>
+
+                        <h5 class="card-title text-light">@ev.Title</h5>
+
+                        <p class="card-text text-secondary small">
+                            @(string.IsNullOrWhiteSpace(ev.Description)
+                                ? "Sin descripción disponible."
+                                : ev.Description.Length > 130
+                                    ? ev.Description.Substring(0, 130) + "..."
+                                    : ev.Description)
+                        </p>
+
+                        <div class="small text-secondary">
+                            <div><strong>Juego:</strong> @ev.GameId</div>
+                            <div><strong>Inicio:</strong> @ev.StartDate.ToString("dd/MM/yyyy HH:mm")</div>
+                            <div><strong>Fin:</strong> @ev.EndDate.ToString("dd/MM/yyyy HH:mm")</div>
+                            <div><strong>Cupo:</strong> @ev.MaxParticipants</div>
+
+                            @if (!string.IsNullOrWhiteSpace(ev.Location))
+                            {
+                                <div><strong>Ubicación:</strong> @ev.Location</div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-between">
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-warning">
+                            Ver detalle
+                        </a>
+                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-light">
+                            Editar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

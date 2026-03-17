@@ -1,0 +1,61 @@
+<div class="d-flex flex-column h-100">
+    <div class="mb-4">
+        <a asp-controller="Home" asp-action="Index" class="cp-brand">
+            CheckPoint
+        </a>
+        <div class="text-secondary small mt-1">
+            Plataforma gamer competitiva
+        </div>
+    </div>
+
+    <nav class="nav flex-column">
+        <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+        <a class="nav-link" asp-controller="Events" asp-action="Index">Eventos</a>
+        <a class="nav-link" asp-controller="Games" asp-action="Index">Juegos</a>
+
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <a class="nav-link" asp-controller="Posts" asp-action="ByEvent">Publicaciones</a>
+            <a class="nav-link" asp-controller="Registrations" asp-action="MyRegistrations">Mis inscripciones</a>
+            <a class="nav-link" asp-controller="Notifications" asp-action="Index">Notificaciones</a>
+            <a class="nav-link" asp-controller="Users" asp-action="MyAccount">Mi cuenta</a>
+            <a class="nav-link" asp-controller="Reports" asp-action="Create">Crear reporte</a>
+        }
+
+        @if (User.IsInRole("Admin"))
+        {
+            <hr class="border-secondary my-3" />
+            <div class="text-uppercase text-secondary small mb-2 px-2">Administración</div>
+
+            <a class="nav-link" asp-controller="Users" asp-action="Index">Usuarios</a>
+            <a class="nav-link" asp-controller="Reports" asp-action="Index">Reportes</a>
+            <a class="nav-link" asp-controller="AuditLog" asp-action="Index">Bitácora</a>
+        }
+    </nav>
+
+    <hr class="border-secondary my-4" />
+
+    <div class="mt-auto">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="text-uppercase text-secondary small mb-2">Accesos rápidos</div>
+            <div class="d-grid gap-2">
+                <a asp-controller="Events" asp-action="Create" class="btn btn-warning btn-sm">Nuevo evento</a>
+                <a asp-controller="Posts" asp-action="Create" class="btn btn-outline-light btn-sm">Nueva publicación</a>
+                <a asp-controller="Reports" asp-action="Create" class="btn btn-outline-danger btn-sm">Crear reporte</a>
+            </div>
+        }
+        else
+        {
+            <div class="text-uppercase text-secondary small mb-2">Cuenta</div>
+            <div class="d-grid gap-2">
+                <a asp-controller="Users" asp-action="Login" class="btn btn-outline-light btn-sm">
+                    Iniciar sesión
+                </a>
+                <a asp-controller="Users" asp-action="Register" class="btn btn-warning btn-sm">
+                    Registrarse
+                </a>
+            </div>
+        }
+    </div>
+</div>

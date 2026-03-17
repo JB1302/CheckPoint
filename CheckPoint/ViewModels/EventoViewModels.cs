@@ -1,10 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using CheckPoint.Models;
+using CheckPoint.Models.Events;
+using CheckPoint.Models.Games;
+using CheckPoint.Models.EventRules;
+using CheckPoint.Models.Posts;
+using CheckPoint.Models.Registrations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CheckPoint.ViewModels
 {
-    public class CrearEventoViewModel
+    public class CreateEventViewModel
     {
         [Required(ErrorMessage = "El título es requerido.")]
         [StringLength(120, ErrorMessage = "Máximo 120 caracteres.")]
@@ -21,7 +25,7 @@ namespace CheckPoint.ViewModels
 
         [Required(ErrorMessage = "Selecciona la modalidad.")]
         [Display(Name = "Modalidad")]
-        public string Type { get; set; } = "Online";
+        public string EventType { get; set; } = "Online";
 
         [Display(Name = "Formato")]
         public string Format { get; set; } = string.Empty;
@@ -52,7 +56,6 @@ namespace CheckPoint.ViewModels
         [Display(Name = "Tags (separados por coma)")]
         public string TagsRaw { get; set; } = string.Empty;
 
-        // Campos para Presencial / Hibrido
         [Display(Name = "Nombre del lugar")]
         public string VenueName { get; set; } = string.Empty;
 
@@ -65,26 +68,23 @@ namespace CheckPoint.ViewModels
         [Display(Name = "País")]
         public string Country { get; set; } = string.Empty;
 
-        // Para el <select> en la vista
         public List<SelectListItem> GameOptions { get; set; } = new();
     }
 
-    public class EditarEventoViewModel : CrearEventoViewModel
+    public class EditEventViewModel : CreateEventViewModel
     {
         public string Id { get; set; } = string.Empty;
     }
 
-    public class DetalleEventoViewModel
+    public class EventDetailViewModel
     {
-        public Evento Evento { get; set; } = null!;
-        public Juego? Juego { get; set; }
-        public ReglaEvento? Rules { get; set; }
-        public List<Publicacion> Posts { get; set; } = new();
-        public List<Inscripcion> Registrations { get; set; } = new();
+        public Events Event { get; set; } = null!;
+        public Game? Game { get; set; }
+        public EventRules? EventRules { get; set; }
+        public List<Post> Posts { get; set; } = new();
+        public List<Registration> Registrations { get; set; } = new();
         public bool IsRegistered { get; set; }
         public bool CanRegister { get; set; }
         public bool IsOrganizer { get; set; }
     }
 }
-
-

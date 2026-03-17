@@ -1,0 +1,62 @@
+﻿@using CheckPoint.Models.Notifications
+@model List<Notification>
+
+@{
+    ViewData["Title"] = "Notificaciones";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <span class="cp-kicker">Actividad</span>
+        <h2 class="text-warning mb-1">Notificaciones</h2>
+        <p class="text-secondary mb-0">Consulta las alertas y novedades del sistema.</p>
+    </div>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="card bg-dark border-secondary shadow-sm">
+        <div class="card-body text-center py-5 text-secondary">
+            No tienes notificaciones registradas.
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var notification in Model)
+        {
+            <div class="col-12">
+                <div class="card bg-dark border-secondary shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                            <div>
+                                <div class="mb-2">
+                                    <span class="badge bg-warning text-dark">@notification.Type</span>
+
+                                    @if (notification.IsRead)
+                                    {
+                                        <span class="badge bg-secondary ms-1">Leída</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success ms-1">Nueva</span>
+                                    }
+                                </div>
+
+                                <p class="mb-1 text-light">@notification.Message</p>
+                                <small class="text-secondary">
+                                    Referencia: @notification.ReferenceId
+                                </small>
+                            </div>
+
+                            <small class="text-secondary">
+                                @notification.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

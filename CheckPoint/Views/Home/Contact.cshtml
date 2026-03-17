@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Contacto";
+}
+
+<div class="cp-hero mb-5 text-center">
+    <span class="cp-kicker">Comunícate con nosotros</span>
+    <h1 class="display-5 fw-bold text-warning">Contacto</h1>
+    <p class="lead text-light mx-auto" style="max-width: 760px;">
+        ¿Tienes dudas o sugerencias sobre CheckPoint? Ponte en contacto con nosotros.
+    </p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-7">
+        <div class="card bg-dark border-secondary h-100">
+            <div class="card-body p-4">
+                <h3 class="text-warning mb-4">Envíanos un mensaje</h3>
+
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label text-light">Nombre</label>
+                        <input type="text" class="form-control bg-black text-light border-secondary" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light">Correo electrónico</label>
+                        <input type="email" class="form-control bg-black text-light border-secondary" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light">Asunto</label>
+                        <input type="text" class="form-control bg-black text-light border-secondary" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light">Mensaje</label>
+                        <textarea class="form-control bg-black text-light border-secondary" rows="5"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">Enviar mensaje</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card bg-dark border-secondary">
+            <div class="card-body p-4">
+                <h4 class="text-warning">Información</h4>
+                <p class="text-light mb-1"><strong>Correo:</strong> soporte@checkpoint.com</p>
+                <p class="text-light mb-0"><strong>Horario:</strong> Lunes a Viernes, 8:00 a.m. - 5:00 p.m.</p>
+            </div>
+        </div>
+    </div>
+</div>

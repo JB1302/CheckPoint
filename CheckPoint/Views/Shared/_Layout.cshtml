@@ -1,113 +1,145 @@
+@{
+    var title = ViewData["Title"] as string ?? "CheckPoint";
+}
+
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} | CheckPoint" : "CheckPoint")</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <title>@title - CheckPoint</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+            body {
+                background-color: #0f1115;
+                color: #e9ecef;
+                margin: 0;
+            }
+
+            .cp-shell {
+                min-height: 100vh;
+            }
+
+            .cp-sidebar {
+                min-height: 100vh;
+                background: #151922;
+                border-right: 1px solid #2a2f3a;
+            }
+
+            .cp-content {
+                min-height: 100vh;
+                background: #0f1115;
+            }
+
+            .cp-brand {
+                color: #ffc107;
+                font-weight: 700;
+                text-decoration: none;
+                font-size: 1.4rem;
+            }
+
+            .cp-card {
+                background: #171b24;
+                border: 1px solid #2b3240;
+                border-radius: 14px;
+            }
+
+            .cp-kicker {
+                display: inline-block;
+                padding: .35rem .75rem;
+                border-radius: 999px;
+                background: rgba(255,193,7,.12);
+                color: #ffc107;
+                font-size: .85rem;
+                margin-bottom: 1rem;
+            }
+
+            .cp-stat-strip {
+                margin-top: 2rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1rem;
+            }
+
+            .cp-stat {
+                background: #171b24;
+                border: 1px solid #2b3240;
+                border-radius: 12px;
+                padding: 1rem;
+            }
+
+                .cp-stat strong {
+                    display: block;
+                    color: #ffc107;
+                    font-size: 1.3rem;
+                }
+
+                .cp-stat span {
+                    color: #adb5bd;
+                    font-size: .9rem;
+                }
+
+            .cp-sidebar .nav-link {
+                color: #ced4da;
+                border-radius: 10px;
+                margin-bottom: .25rem;
+                text-decoration: none;
+                display: block;
+                padding: .6rem .8rem;
+            }
+
+                .cp-sidebar .nav-link:hover {
+                    background: #212734;
+                    color: #ffc107;
+                }
+
+            .cp-main-container {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .table {
+                color: #e9ecef;
+            }
+
+            .form-control, .form-select {
+                background-color: #0f1115;
+                color: #e9ecef;
+                border: 1px solid #343a40;
+            }
+
+                .form-control:focus, .form-select:focus {
+                    background-color: #0f1115;
+                    color: #e9ecef;
+                    border-color: #ffc107;
+                    box-shadow: 0 0 0 .2rem rgba(255,193,7,.15);
+                }
+    </style>
 </head>
 <body>
+    <div class="container-fluid cp-shell">
+        <div class="row g-0">
+            <aside class="col-md-3 col-lg-2 cp-sidebar p-3">
+                @await Html.PartialAsync("_SidebarAdmin")
+            </aside>
 
-    <!-- Barra de navegacion -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary cp-nav">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-warning fs-4" asp-controller="Inicio" asp-action="Index">
-                CheckPoint
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Eventos" asp-action="Index">Eventos</a>
-                    </li>
-                    @if (User.IsInRole("Organizer") || User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Eventos" asp-action="Create">Crear Evento</a>
-                        </li>
-                    }
-                </ul>
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Inscripciones" asp-action="MyEvents">Mis Eventos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Notificaciones" asp-action="Index">
-                                Notificaciones
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Perfiles" asp-action="Index"
-                               asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
-                                @User.Identity.Name
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <form asp-controller="Cuenta" asp-action="Logout" method="post" class="d-inline">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="nav-link btn btn-link text-danger p-0 ms-2">Salir</button>
-                            </form>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Cuenta" asp-action="Login">Iniciar sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-warning btn-sm ms-2" asp-controller="Cuenta" asp-action="Register">Registrarse</a>
-                        </li>
-                    }
-                </ul>
+            <div class="col-md-9 col-lg-10 cp-content">
+                @await Html.PartialAsync("_TopNavbar")
+
+                <main class="p-4 cp-main-container">
+                    @await Html.PartialAsync("_StatusMessage")
+                    @RenderBody()
+                </main>
             </div>
         </div>
-    </nav>
-
-    <!-- Alertas -->
-    <div class="container mt-2">
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                @TempData["Success"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
-        @if (TempData["Error"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                @TempData["Error"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
-        @if (TempData["Info"] != null)
-        {
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                @TempData["Info"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
     </div>
 
-    <!-- Contenido de pagina -->
-    <main class="container py-4 cp-main">
-        @RenderBody()
-    </main>
-
-    <footer class="bg-dark border-top border-secondary text-center text-secondary py-3 mt-4 cp-footer">
-        <small>CheckPoint (c) @DateTime.Now.Year - Plataforma gamer</small>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
-
-

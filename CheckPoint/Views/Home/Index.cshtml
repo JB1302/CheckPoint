@@ -1,0 +1,109 @@
+﻿@using CheckPoint.Models.Events
+@using CheckPoint.Models.Games
+@model List<Events>
+
+@{
+    ViewData["Title"] = "CheckPoint";
+    var games = ViewBag.Games as List<Game> ?? new List<Game>();
+}
+
+<div class="cp-hero mb-5 text-center">
+    <span class="cp-kicker">Plataforma competitiva</span>
+    <h1 class="display-4 fw-bold text-warning">CheckPoint</h1>
+    <p class="lead text-light mx-auto" style="max-width: 760px;">
+        Centraliza tus torneos, descubre eventos y construye reputación competitiva en un solo lugar.
+    </p>
+
+    <div class="mt-4">
+        <a asp-controller="Events" asp-action="Index" class="btn btn-warning btn-lg px-5">
+            Explorar eventos
+        </a>
+
+        @if (!(User.Identity?.IsAuthenticated ?? false))
+        {
+            <a asp-controller="Users" asp-action="Register" class="btn btn-outline-warning btn-lg px-5 ms-2">
+                Crear cuenta
+            </a>
+        }
+    </div>
+
+    <div class="cp-stat-strip text-start mt-5">
+        <div class="cp-stat">
+            <strong>@Model.Count</strong>
+            <span>Eventos visibles</span>
+        </div>
+        <div class="cp-stat">
+            <strong>@games.Count</strong>
+            <span>Juegos en catálogo</span>
+        </div>
+        <div class="cp-stat">
+            <strong>24/7</strong>
+            <span>Comunidad activa</span>
+        </div>
+    </div>
+</div>
+
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-warning mb-0">Próximos eventos</h3>
+        <a asp-controller="Events" asp-action="Index" class="btn btn-sm btn-outline-warning">
+            Ver todos
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card bg-dark border-secondary text-center p-5">
+            <p class="text-secondary mb-3">No hay eventos disponibles por ahora.</p>
+            <a asp-controller="Events" asp-action="Create" class="btn btn-warning">
+                Crear primer evento
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var ev in Model.Take(9))
+            {
+                <div class="col">
+                    <div class="card h-100 bg-dark border-secondary shadow-sm">
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">@ev.EventType</span>
+                            <h5 class="card-title text-light">@ev.Title</h5>
+
+                            <p class="card-text text-secondary small">
+                                @(string.IsNullOrWhiteSpace(ev.Description)
+                                    ? "Sin descripción disponible."
+                                    : ev.Description.Length > 120
+                                        ? ev.Description.Substring(0, 120) + "..."
+                                        : ev.Description)
+                            </p>
+
+                            <div class="small text-secondary mb-2">
+                                <div><strong>Inicio:</strong> @ev.StartDate.ToString("dd/MM/yyyy HH:mm")</div>
+                                <div><strong>Fin:</strong> @ev.EndDate.ToString("dd/MM/yyyy HH:mm")</div>
+                                <div><strong>Cupo:</strong> @ev.MaxParticipants participantes</div>
+
+                                @if (!string.IsNullOrWhiteSpace(ev.Location))
+                                {
+                                    <div><strong>Ubicación:</strong> @ev.Location</div>
+                                }
+                                else if (!string.IsNullOrWhiteSpace(ev.OnlineLink))
+                                {
+                                    <div><strong>Modalidad:</strong> En línea</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-between align-items-center">
+                            <small class="text-secondary">@ev.Status</small>
+                            <a asp-controller="Events" asp-action="Details" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-warning">
+                                Ver detalle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

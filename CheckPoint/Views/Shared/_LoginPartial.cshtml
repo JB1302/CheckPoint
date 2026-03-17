@@ -1,0 +1,31 @@
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <span class="text-light small">
+            Hola, <strong>@User.Identity?.Name</strong>
+        </span>
+
+        <a asp-controller="Users" asp-action="MyAccount" class="btn btn-sm btn-outline-warning">
+            Mi perfil
+        </a>
+
+        <form asp-controller="Users" asp-action="Logout" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-sm btn-warning">
+                Cerrar sesión
+            </button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <a asp-controller="Users" asp-action="Login" class="btn btn-sm btn-outline-light">
+            Iniciar sesión
+        </a>
+
+        <a asp-controller="Users" asp-action="Register" class="btn btn-sm btn-warning">
+            Registrarse
+        </a>
+    </div>
+}

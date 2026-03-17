@@ -1,10 +1,20 @@
 @{
     ViewData["Title"] = "Error";
 }
-<div class="text-center py-5">
-    <h1 class="display-1 text-warning">Error</h1>
-    <h2>Ocurrió un error</h2>
-    <p class="text-secondary">Algo salió mal. Por favor intenta de nuevo o vuelve al inicio.</p>
-    <a asp-controller="Inicio" asp-action="Index" class="btn btn-warning">Volver al inicio</a>
-</div>
 
+<div class="cp-card p-5 text-center">
+    <span class="cp-kicker">Ocurrió un problema</span>
+    <h1 class="text-warning mb-3">Error</h1>
+    <p class="text-secondary mb-4">
+        Lo sentimos, ocurrió un error al procesar la solicitud.
+    </p>
+
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-warning">
+            Volver al inicio
+        </a>
+        <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-light">
+            Contactar soporte
+        </a>
+    </div>
+</div>

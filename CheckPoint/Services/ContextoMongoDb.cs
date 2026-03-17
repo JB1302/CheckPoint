@@ -1,4 +1,15 @@
-using CheckPoint.Models;
+using CheckPoint.Models.AuditLogs;
+using CheckPoint.Models.Comments;
+using CheckPoint.Models.EventRules;
+using CheckPoint.Models.Events;
+using CheckPoint.Models.Games;
+using CheckPoint.Models.Notifications;
+using CheckPoint.Models.Posts;
+using CheckPoint.Models.Profiles;
+using CheckPoint.Models.Reactions;
+using CheckPoint.Models.Registrations;
+using CheckPoint.Models.Reports;
+using CheckPoint.Models.Users;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -17,42 +28,40 @@ namespace CheckPoint.Services
             _db = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<Usuario> Users =>
-            _db.GetCollection<Usuario>("Users");
+        public IMongoCollection<User> Users =>
+            _db.GetCollection<User>("Users");
 
-        public IMongoCollection<Perfil> Profiles =>
-            _db.GetCollection<Perfil>("Perfiles");
+        public IMongoCollection<Profile> Profiles =>
+            _db.GetCollection<Profile>("Profiles");
 
-        public IMongoCollection<Juego> Games =>
-            _db.GetCollection<Juego>("Juegos");
+        public IMongoCollection<Game> Games =>
+            _db.GetCollection<Game>("Games");
 
-        public IMongoCollection<Evento> Events =>
-            _db.GetCollection<Evento>("Eventos");
+        public IMongoCollection<Events> Events =>
+            _db.GetCollection<Events>("Events");
 
-        public IMongoCollection<ReglaEvento> EventRules =>
-            _db.GetCollection<ReglaEvento>("EventRules");
+        public IMongoCollection<EventRules> EventRules =>
+            _db.GetCollection<EventRules>("EventRules");
 
-        public IMongoCollection<Inscripcion> Registrations =>
-            _db.GetCollection<Inscripcion>("Inscripciones");
+        public IMongoCollection<Registration> Registrations =>
+            _db.GetCollection<Registration>("Registrations");
 
-        public IMongoCollection<Publicacion> Posts =>
-            _db.GetCollection<Publicacion>("Publicaciones");
+        public IMongoCollection<Post> Posts =>
+            _db.GetCollection<Post>("Posts");
 
-        public IMongoCollection<Comentario> Comments =>
-            _db.GetCollection<Comentario>("Comments");
+        public IMongoCollection<Comment> Comments =>
+            _db.GetCollection<Comment>("Comments");
 
-        public IMongoCollection<Reaccion> Reactions =>
-            _db.GetCollection<Reaccion>("Reactions");
+        public IMongoCollection<Reaction> Reactions =>
+            _db.GetCollection<Reaction>("Reactions");
 
-        public IMongoCollection<Notificacion> Notifications =>
-            _db.GetCollection<Notificacion>("Notificaciones");
+        public IMongoCollection<Notification> Notifications =>
+            _db.GetCollection<Notification>("Notifications");
 
-        public IMongoCollection<Reporte> Reports =>
-            _db.GetCollection<Reporte>("Reports");
+        public IMongoCollection<Report> Reports =>
+            _db.GetCollection<Report>("Reports");
 
-        public IMongoCollection<BitacoraAuditoria> AuditLogs =>
-            _db.GetCollection<BitacoraAuditoria>("AuditLogs");
+        public IMongoCollection<AuditLog> AuditLogs =>
+            _db.GetCollection<AuditLog>("AuditLogs");
     }
 }
-
-

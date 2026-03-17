@@ -1,0 +1,29 @@
+@{
+    var success = TempData["SuccessMessage"]?.ToString();
+    var error = TempData["ErrorMessage"]?.ToString();
+    var info = TempData["InfoMessage"]?.ToString();
+}
+
+@if (!string.IsNullOrWhiteSpace(success))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @success
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @error
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(info))
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @info
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}

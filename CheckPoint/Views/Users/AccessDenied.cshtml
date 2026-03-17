@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Acceso denegado";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card bg-dark border-secondary shadow-sm">
+            <div class="card-body p-5 text-center">
+                <span class="cp-kicker">Permisos insuficientes</span>
+                <h1 class="text-warning mb-3">Acceso denegado</h1>
+                <p class="text-secondary mb-4">
+                    No tienes permisos para acceder a esta sección de la plataforma.
+                </p>
+
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">
+                        Volver al inicio
+                    </a>
+                    <a asp-controller="Users" asp-action="MyAccount" class="btn btn-outline-light">
+                        Ir a mi cuenta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

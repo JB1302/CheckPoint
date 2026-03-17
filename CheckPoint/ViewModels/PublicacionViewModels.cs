@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CheckPoint.ViewModels
 {
-    public class CrearPublicacionViewModel
+    public class CreatePostViewModel
     {
         public string EventId { get; set; } = string.Empty;
 
@@ -15,13 +15,13 @@ namespace CheckPoint.ViewModels
         [Display(Name = "Contenido")]
         public string Content { get; set; } = string.Empty;
 
-        /// <summary>Anuncio | Actualizacion | Resultado</summary>
+        /// <summary>Announcement | Update | Result</summary>
         [Required]
         [Display(Name = "Tipo")]
         public string Type { get; set; } = "Announcement";
     }
 
-    public class CrearComentarioViewModel
+    public class CreateCommentViewModel
     {
         public string PostId { get; set; } = string.Empty;
         public string EventId { get; set; } = string.Empty;
@@ -32,5 +32,3 @@ namespace CheckPoint.ViewModels
         public string Content { get; set; } = string.Empty;
     }
 }
-
-

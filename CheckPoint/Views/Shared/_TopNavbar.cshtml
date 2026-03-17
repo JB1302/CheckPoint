@@ -1,0 +1,19 @@
+<header class="border-bottom border-secondary px-4 py-3 bg-dark">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h5 class="mb-0 text-light">@ViewData["Title"]</h5>
+            <small class="text-secondary">Gestión de eventos y comunidad gamer</small>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <form class="d-none d-md-block" method="get" asp-controller="Events" asp-action="Index">
+                <div class="input-group">
+                    <input type="text" name="query" class="form-control form-control-sm" placeholder="Buscar eventos..." />
+                    <button class="btn btn-outline-warning btn-sm" type="submit">Buscar</button>
+                </div>
+            </form>
+
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
+    </div>
+</header>
