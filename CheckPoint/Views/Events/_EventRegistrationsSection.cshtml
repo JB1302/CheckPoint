@@ -1,0 +1,10 @@
+@model IEnumerable<RegistrationViewModel>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Participantes (@Model.Count())</h5>
+    </div>
+    <div class="card-body">
+        @await Html.PartialAsync("_RegistrationTable", Model)
+    </div>
+</div>

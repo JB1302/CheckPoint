@@ -1,0 +1,30 @@
+@model PostsByEventViewModel
+@{
+    ViewData["Title"] = $"Publicaciones - {Model.EventTitle}";
+}
+
+<h1>Publicaciones del Evento: @Model.EventTitle</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" name="eventId" value="@Model.EventId" />
+                        <textarea name="content" class="form-control mb-2" rows="3" placeholder="Escribe una publicación..."></textarea>
+                        <button type="submit" class="btn btn-primary">Publicar</button>
+                    </form>
+                </div>
+            </div>
+        }
+        
+        <div class="posts-list">
+            @foreach (var post in Model.Posts)
+            {
+                @await Html.PartialAsync("_PostCard", post)
+            }
+        </div>
+    </div>
+</div>

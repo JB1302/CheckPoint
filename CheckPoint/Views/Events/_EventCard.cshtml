@@ -1,0 +1,21 @@
+@model EventViewModel
+
+<div class="card h-100">
+    <div class="card-header">
+        <h5 class="card-title">@Model.Title</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">@Model.Description?.Substring(0, Math.Min(100, Model.Description?.Length ?? 0))</p>
+        <p><strong>Juego:</strong> @Model.GameName</p>
+        <p><strong>Fecha:</strong> @Model.EventDate.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Ubicación:</strong> @Model.Location</p>
+        <p><strong>Participantes:</strong> @Model.ParticipantCount</p>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Ver Detalles</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+            @await Html.PartialAsync("_JoinButton", Model)
+        }
+    </div>
+</div>

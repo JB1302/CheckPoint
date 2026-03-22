@@ -1,0 +1,22 @@
+@model CommentViewModel
+
+<div class="card mb-2">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <strong>@Model.AuthorName</strong>
+            <small class="text-muted">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+        </div>
+        <p class="mt-2 mb-0">@Model.Content</p>
+        
+        @if (User.Identity.Name == Model.AuthorName || User.IsInRole("Admin"))
+        {
+            <div class="mt-2">
+                <form asp-controller="Comments" asp-action="Delete" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="postId" value="@Model.PostId" />
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar comentario?')">Eliminar</button>
+                </form>
+            </div>
+        }
+    </div>
+</div>

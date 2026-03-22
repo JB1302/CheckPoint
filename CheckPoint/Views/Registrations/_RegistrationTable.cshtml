@@ -1,0 +1,39 @@
+@model IEnumerable<RegistrationViewModel>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Evento</th>
+                <th>Fecha Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registration in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@registration.EventId">
+                            @registration.EventTitle
+                        </a>
+                    </td>
+                    <td>@registration.RegisteredAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@await Html.PartialAsync("_RegistrationStatusBadge", registration.Status)</td>
+                    <td>
+                        @if (registration.Status == "Confirmed")
+                        {
+                            <form asp-action="CancelRegistration" method="post">
+                                <input type="hidden" name="eventId" value="@registration.EventId" />
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Cancelar registro?')">
+                                    Cancelar
+                                </button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

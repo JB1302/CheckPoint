@@ -1,0 +1,15 @@
+@model GameViewModel
+
+<div class="card h-100">
+    @if (!string.IsNullOrEmpty(Model.CoverImage))
+    {
+        <img src="@Model.CoverImage" class="card-img-top" alt="@Model.Name">
+    }
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">@Model.Description?.Substring(0, Math.Min(100, Model.Description?.Length ?? 0))...</p>
+        <p><strong>Género:</strong> @Model.Genre</p>
+        <p><strong>Plataforma:</strong> @Model.Platform</p>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Ver Detalles</a>
+    </div>
+</div>

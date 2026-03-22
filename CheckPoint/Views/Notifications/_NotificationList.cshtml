@@ -1,0 +1,17 @@
+@model IEnumerable<NotificationViewModel>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No tienes notificaciones.
+    </div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var notification in Model)
+        {
+            @await Html.PartialAsync("_NotificationItem", notification)
+        }
+    </div>
+}

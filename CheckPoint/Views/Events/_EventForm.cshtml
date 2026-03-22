@@ -1,0 +1,38 @@
+@model dynamic
+
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" required />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="5" required></textarea>
+</div>
+
+<div class="mb-3">
+    <label asp-for="GameId" class="form-label"></label>
+    <select asp-for="GameId" class="form-control" required>
+        <option value="">Selecciona un juego</option>
+        @foreach (var game in ViewBag.Games)
+        {
+            <option value="@game.Id">@game.Name</option>
+        }
+    </select>
+</div>
+
+<div class="mb-3">
+    <label asp-for="EventDate" class="form-label"></label>
+    <input asp-for="EventDate" type="datetime-local" class="form-control" required />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Location" class="form-label"></label>
+    <input asp-for="Location" class="form-control" required />
+</div>
+
+<div class="mb-3">
+    <label asp-for="MaxParticipants" class="form-label"></label>
+    <input asp-for="MaxParticipants" type="number" class="form-control" min="1" required />
+</div>

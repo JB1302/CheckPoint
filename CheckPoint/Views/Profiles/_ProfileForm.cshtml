@@ -1,0 +1,32 @@
+@model dynamic
+
+<div class="mb-3">
+    <label asp-for="Username" class="form-label"></label>
+    <input asp-for="Username" class="form-control" required />
+    <span asp-validation-for="Username" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Bio" class="form-label"></label>
+    <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Location" class="form-label"></label>
+    <input asp-for="Location" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Website" class="form-label"></label>
+    <input asp-for="Website" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Avatar" class="form-label"></label>
+    <input asp-for="Avatar" type="file" class="form-control" accept="image/*" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Juegos Favoritos</label>
+    @await Html.PartialAsync("_FavoriteGamesSelector", Model.FavoriteGames)
+</div>

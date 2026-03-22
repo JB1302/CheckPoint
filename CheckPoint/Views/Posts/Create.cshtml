@@ -1,0 +1,21 @@
+@model PostCreateViewModel
+@{
+    ViewData["Title"] = "Crear Publicación";
+}
+
+<h1>Crear Publicación</h1>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="EventId" />
+    
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="5" required></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Publicar</button>
+        <a asp-action="Index" asp-route-eventId="@Model.EventId" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

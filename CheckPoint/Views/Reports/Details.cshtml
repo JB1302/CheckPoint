@@ -1,0 +1,58 @@
+@model ReportDetailsViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2>@Model.Title</h2>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Tipo:</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+            
+            <dt class="col-sm-3">Descripción:</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+            
+            <dt class="col-sm-3">Reportado por:</dt>
+            <dd class="col-sm-9">@Model.ReporterName</dd>
+            
+            <dt class="col-sm-3">Contenido Reportado:</dt>
+            <dd class="col-sm-9">
+                @if (Model.ReportedContent != null)
+                {
+                    <div class="alert alert-secondary">
+                        @Model.ReportedContent
+                    </div>
+                }
+            </dd>
+            
+            <dt class="col-sm-3">Fecha Reporte:</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            
+            <dt class="col-sm-3">Estado:</dt>
+            <dd class="col-sm-9">@await Html.PartialAsync("_ReportStatusBadge", Model.Status)</dd>
+            
+            @if (!string.IsNullOrEmpty(Model.ResolutionNotes))
+            {
+                <dt class="col-sm-3">Notas de Resolución:</dt>
+                <dd class="col-sm-9">@Model.ResolutionNotes</dd>
+            }
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        
+        @if (User.IsInRole("Admin") && Model.Status == "Pending")
+        {
+            <form asp-action="Resolve" method="post" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="input-group mt-2">
+                    <input type="text" name="resolutionNotes" class="form-control" placeholder="Notas de resolución..." />
+                    <button type="submit" class="btn btn-success">Resolver Reporte</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>

@@ -1,0 +1,36 @@
+@model AuditLogFiltersViewModel
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="userId" class="form-control" placeholder="Usuario" value="@Model.UserId" />
+        </div>
+        <div class="col-md-2">
+            <select name="action" class="form-control">
+                <option value="">Todas las acciones</option>
+                <option value="Create">Crear</option>
+                <option value="Update">Actualizar</option>
+                <option value="Delete">Eliminar</option>
+                <option value="View">Ver</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="entityType" class="form-control">
+                <option value="">Todas las entidades</option>
+                <option value="User">Usuario</option>
+                <option value="Game">Juego</option>
+                <option value="Event">Evento</option>
+                <option value="Post">Publicación</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="fromDate" class="form-control" value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="toDate" class="form-control" value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+    </div>
+</form>

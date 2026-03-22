@@ -1,0 +1,36 @@
+@{
+    var unreadCount = ViewBag.UnreadNotificationsCount ?? 0;
+}
+
+<div class="dropdown">
+    <button class="btn btn-outline-light position-relative" type="button" data-bs-toggle="dropdown">
+        🔔
+        @if (unreadCount > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                @unreadCount
+                <span class="visually-hidden">notificaciones no leídas</span>
+            </span>
+        }
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" style="width: 300px;">
+        <li><h6 class="dropdown-header">Notificaciones</h6></li>
+        <li><hr class="dropdown-divider"></li>
+        @if (ViewBag.RecentNotifications != null)
+        {
+            @foreach (var notification in ViewBag.RecentNotifications as IEnumerable<NotificationViewModel>)
+            {
+                <li>
+                    <a class="dropdown-item" asp-controller="Notifications" asp-action="Index">
+                        <div>
+                            <strong>@notification.Title</strong>
+                            <p class="mb-0 small">@notification.Message</p>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-center" asp-controller="Notifications" asp-action="Index">Ver todas</a></li>
+    </ul>
+</div>

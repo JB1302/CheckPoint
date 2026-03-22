@@ -1,0 +1,15 @@
+@model EventCreateViewModel
+@{
+    ViewData["Title"] = "Crear Evento";
+}
+
+<h1>Crear Nuevo Evento</h1>
+
+<form asp-action="Create" method="post">
+    @await Html.PartialAsync("_EventForm", Model)
+    
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Crear</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

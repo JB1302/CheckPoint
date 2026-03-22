@@ -1,0 +1,14 @@
+@model string
+
+@if (Model == "Active")
+{
+    <span class="badge bg-success">Activo</span>
+}
+else if (Model == "Suspended")
+{
+    <span class="badge bg-danger">Suspendido</span>
+}
+else
+{
+    <span class="badge bg-secondary">@Model</span>
+}

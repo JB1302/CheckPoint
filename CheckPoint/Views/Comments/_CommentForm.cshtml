@@ -1,0 +1,9 @@
+@model string
+
+<form asp-controller="Comments" asp-action="Create" method="post" class="mt-2">
+    <input type="hidden" name="postId" value="@Model" />
+    <div class="input-group">
+        <input type="text" name="content" class="form-control" placeholder="Escribe un comentario..." required />
+        <button type="submit" class="btn btn-primary">Comentar</button>
+    </div>
+</form>

@@ -1,0 +1,32 @@
+@model EventDetailsViewModel
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Acciones</h5>
+    </div>
+    <div class="card-body">
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (!Model.IsUserRegistered)
+            {
+                <form asp-controller="Registrations" asp-action="Join" method="post">
+                    <input type="hidden" name="eventId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-success w-100 mb-2">Unirse al Evento</button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Registrations" asp-action="Cancel" method="post">
+                    <input type="hidden" name="eventId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger w-100 mb-2">Cancelar Registro</button>
+                </form>
+            }
+        }
+        
+        @if (User.IsInRole("Admin") || Model.IsUserOrganizer)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-100 mb-2">Editar Evento</a>
+            <a asp-action="MyEvents" class="btn btn-info w-100">Mis Eventos</a>
+        }
+    </div>
+</div>

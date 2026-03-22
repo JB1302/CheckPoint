@@ -1,0 +1,23 @@
+@model PostViewModel
+
+@if (Model.Reactions.Any())
+{
+    <div class="reaction-summary mt-1">
+        <small class="text-muted">
+            @{
+                var topReactions = Model.Reactions
+                    .GroupBy(r => r.Type)
+                    .Select(g => new { Type = g.Key, Count = g.Count() })
+                    .OrderByDescending(g => g.Count)
+                    .Take(3);
+                
+                foreach (var reaction in topReactions)
+                {
+                    var emoji = reaction.Type == "Like" ? "👍" : 
+                               reaction.Type == "Love" ? "❤️" : "😂";
+                    <span>@emoji @reaction.Count </span>
+                }
+            }
+        </small>
+    </div>
+}
