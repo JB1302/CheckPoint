@@ -83,5 +83,8 @@ namespace CheckPoint.Services
 
             await _events.UpdateOneAsync(e => e.Id == id, update);
         }
+
+        public async Task DeleteAsync(string id) =>
+            await _events.DeleteOneAsync(e => e.Id == id);
     }
 }

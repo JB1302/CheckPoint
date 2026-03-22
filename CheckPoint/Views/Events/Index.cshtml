@@ -1,6 +1,3 @@
-﻿@using CheckPoint.Models.Events
-@model List<Events>
-
 @{
     ViewData["Title"] = "Eventos";
 }
@@ -9,69 +6,371 @@
     <div>
         <span class="cp-kicker">Competencias</span>
         <h2 class="text-warning mb-1">Eventos</h2>
-        <p class="text-secondary mb-0">Explora los eventos disponibles en la plataforma.</p>
+        <p class="text-secondary mb-0">Explora y administra los eventos de la plataforma.</p>
     </div>
-
-    <a asp-controller="Events" asp-action="Create" class="btn btn-warning">
-        Crear evento
-    </a>
+    <button class="btn btn-warning" onclick="abrirModalCrear()">Crear evento</button>
 </div>
 
-@if (Model == null || !Model.Any())
-{
-    <div class="card bg-dark border-secondary shadow-sm">
-        <div class="card-body text-center py-5">
-            <p class="text-secondary mb-3">No hay eventos registrados por el momento.</p>
-            <a asp-controller="Events" asp-action="Create" class="btn btn-warning">Crear primer evento</a>
+<!-- Filtros -->
+<div class="card bg-dark border-secondary shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label text-secondary small">Buscar por título</label>
+                <input type="text" id="filtroBusqueda" class="form-control" placeholder="Ej: Torneo..." oninput="filtrarEventos()" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small">Tipo</label>
+                <select id="filtroTipo" class="form-select" onchange="filtrarEventos()">
+                    <option value="">Todos</option>
+                    <option value="Online">Online</option>
+                    <option value="Presencial">Presencial</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small">Juego</label>
+                <select id="filtroJuego" class="form-select" onchange="filtrarEventos()">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-secondary w-100" onclick="limpiarFiltros()">Limpiar</button>
+            </div>
         </div>
     </div>
-}
-else
-{
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-        @foreach (var ev in Model)
-        {
-            <div class="col">
-                <div class="card h-100 bg-dark border-secondary shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <span class="badge bg-warning text-dark">@ev.EventType</span>
-                            <span class="badge bg-secondary">@ev.Status</span>
-                        </div>
+</div>
 
-                        <h5 class="card-title text-light">@ev.Title</h5>
+<div id="cargando" class="text-center py-5 text-secondary">Cargando eventos...</div>
+<div id="sinEventos" class="card bg-dark border-secondary shadow-sm d-none">
+    <div class="card-body text-center py-5">
+        <p class="text-secondary mb-3">No hay eventos que coincidan.</p>
+    </div>
+</div>
 
-                        <p class="card-text text-secondary small">
-                            @(string.IsNullOrWhiteSpace(ev.Description)
-                                ? "Sin descripción disponible."
-                                : ev.Description.Length > 130
-                                    ? ev.Description.Substring(0, 130) + "..."
-                                    : ev.Description)
-                        </p>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" id="contenedorEventos"></div>
 
-                        <div class="small text-secondary">
-                            <div><strong>Juego:</strong> @ev.GameId</div>
-                            <div><strong>Inicio:</strong> @ev.StartDate.ToString("dd/MM/yyyy HH:mm")</div>
-                            <div><strong>Fin:</strong> @ev.EndDate.ToString("dd/MM/yyyy HH:mm")</div>
-                            <div><strong>Cupo:</strong> @ev.MaxParticipants</div>
+<!-- Modal Crear / Editar -->
+<div class="modal fade" id="modalEvento" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark border-secondary text-light">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="modalTitulo">Crear evento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="eventoId" />
 
-                            @if (!string.IsNullOrWhiteSpace(ev.Location))
-                            {
-                                <div><strong>Ubicación:</strong> @ev.Location</div>
-                            }
-                        </div>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Título</label>
+                        <input type="text" id="eventoTitulo" class="form-control" placeholder="Nombre del evento" />
                     </div>
-
-                    <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-between">
-                        <a asp-controller="Events" asp-action="Details" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-warning">
-                            Ver detalle
-                        </a>
-                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-light">
-                            Editar
-                        </a>
+                    <div class="col-12">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="eventoDescripcion" class="form-control" rows="3" placeholder="Descripción del evento"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Juego</label>
+                        <select id="eventoJuego" class="form-select">
+                            <option value="">Selecciona un juego</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo</label>
+                        <select id="eventoTipo" class="form-select">
+                            <option value="Online">Online</option>
+                            <option value="Presencial">Presencial</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Fecha inicio</label>
+                        <input type="datetime-local" id="eventoInicio" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Fecha fin</label>
+                        <input type="datetime-local" id="eventoFin" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Máx. participantes</label>
+                        <input type="number" id="eventoMaxParticipantes" class="form-control" min="1" value="32" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Estado</label>
+                        <select id="eventoEstado" class="form-select">
+                            <option value="Published">Published</option>
+                            <option value="Open">Open</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Link online <span class="text-secondary small">(opcional)</span></label>
+                        <input type="text" id="eventoLink" class="form-control" placeholder="https://..." />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Ubicación <span class="text-secondary small">(opcional)</span></label>
+                        <input type="text" id="eventoUbicacion" class="form-control" placeholder="Ciudad, Lugar..." />
                     </div>
                 </div>
+
+                <div id="errorEvento" class="text-danger mt-3 d-none"></div>
             </div>
-        }
+            <div class="modal-footer border-secondary">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-warning" onclick="guardarEvento()">Guardar</button>
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Modal Confirmar Eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content bg-dark border-danger text-light">
+            <div class="modal-header border-danger">
+                <h5 class="modal-title">Eliminar evento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás segura de que deseas eliminar <strong id="tituloEliminar"></strong>?</p>
+                <input type="hidden" id="idEliminar" />
+            </div>
+            <div class="modal-footer border-danger">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarEliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const modalEvento   = new bootstrap.Modal(document.getElementById('modalEvento'));
+    const modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminar'));
+
+    let todosLosEventos = [];
+    let mapaJuegos      = {};
+
+    async function cargarDatos() {
+        const [resEventos, resJuegos] = await Promise.all([
+            fetch('/api/eventos'),
+            fetch('/api/juegos')
+        ]);
+
+        const juegos = await resJuegos.json();
+        todosLosEventos = await resEventos.json();
+
+        // Mapa id → nombre para mostrar el nombre del juego en las cards
+        juegos.forEach(j => mapaJuegos[j.id] = j.name);
+
+        // Poblar select de juegos en filtro y en modal
+        const filtroJuego  = document.getElementById('filtroJuego');
+        const eventoJuego  = document.getElementById('eventoJuego');
+
+        juegos.forEach(j => {
+            filtroJuego.innerHTML  += `<option value="${j.id}">${j.name}</option>`;
+            eventoJuego.innerHTML  += `<option value="${j.id}">${j.name}</option>`;
+        });
+
+        document.getElementById('cargando').classList.add('d-none');
+        renderizarEventos(todosLosEventos);
+    }
+
+    function renderizarEventos(lista) {
+        const contenedor = document.getElementById('contenedorEventos');
+        const sinEventos = document.getElementById('sinEventos');
+        contenedor.innerHTML = '';
+
+        if (!lista.length) {
+            sinEventos.classList.remove('d-none');
+            return;
+        }
+
+        sinEventos.classList.add('d-none');
+
+        lista.forEach(ev => {
+            const nombreJuego  = mapaJuegos[ev.gameId] || ev.gameId;
+            const inicio       = new Date(ev.startDate).toLocaleString('es-CR');
+            const fin          = new Date(ev.endDate).toLocaleString('es-CR');
+            const descripcion  = (ev.description || '').length > 130
+                ? ev.description.substring(0, 130) + '...'
+                : (ev.description || 'Sin descripción.');
+
+            const estadoColor = ev.status === 'Published' ? 'bg-success'
+                              : ev.status === 'Open'      ? 'bg-primary'
+                              : 'bg-secondary';
+
+            const ubicacion = ev.location
+                ? `<div><strong>Ubicación:</strong> ${ev.location}</div>`
+                : '';
+            const link = ev.onlineLink
+                ? `<div><a href="${ev.onlineLink}" target="_blank" class="text-warning small">Ver enlace online</a></div>`
+                : '';
+
+            contenedor.innerHTML += `
+                <div class="col">
+                    <div class="card h-100 bg-dark border-secondary shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-warning text-dark">${ev.eventType}</span>
+                                <span class="badge ${estadoColor}">${ev.status}</span>
+                            </div>
+                            <h5 class="card-title text-light">${ev.title}</h5>
+                            <p class="card-text text-secondary small">${descripcion}</p>
+                            <div class="small text-secondary">
+                                <div><strong>Juego:</strong> ${nombreJuego}</div>
+                                <div><strong>Inicio:</strong> ${inicio}</div>
+                                <div><strong>Fin:</strong> ${fin}</div>
+                                <div><strong>Cupo:</strong> ${ev.maxParticipants}</div>
+                                ${ubicacion}
+                                ${link}
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-end gap-2">
+                            <button class="btn btn-sm btn-outline-warning"
+                                onclick="abrirModalEditar('${ev.id}')">
+                                Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger"
+                                onclick="abrirModalEliminar('${ev.id}','${escapar(ev.title)}')">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function filtrarEventos() {
+        const busqueda = document.getElementById('filtroBusqueda').value.toLowerCase();
+        const tipo     = document.getElementById('filtroTipo').value;
+        const juego    = document.getElementById('filtroJuego').value;
+
+        const resultado = todosLosEventos.filter(ev => {
+            const coincideBusqueda = !busqueda || ev.title.toLowerCase().includes(busqueda);
+            const coincideTipo     = !tipo     || ev.eventType === tipo;
+            const coincideJuego    = !juego    || ev.gameId === juego;
+            return coincideBusqueda && coincideTipo && coincideJuego;
+        });
+
+        renderizarEventos(resultado);
+    }
+
+    function limpiarFiltros() {
+        document.getElementById('filtroBusqueda').value = '';
+        document.getElementById('filtroTipo').value     = '';
+        document.getElementById('filtroJuego').value    = '';
+        renderizarEventos(todosLosEventos);
+    }
+
+    function escapar(str) {
+        return (str || '').replace(/'/g, "\\'");
+    }
+
+    function abrirModalCrear() {
+        document.getElementById('modalTitulo').textContent = 'Crear evento';
+        document.getElementById('eventoId').value          = '';
+        document.getElementById('eventoTitulo').value      = '';
+        document.getElementById('eventoDescripcion').value = '';
+        document.getElementById('eventoJuego').value       = '';
+        document.getElementById('eventoTipo').value        = 'Online';
+        document.getElementById('eventoEstado').value      = 'Published';
+        document.getElementById('eventoInicio').value      = '';
+        document.getElementById('eventoFin').value         = '';
+        document.getElementById('eventoMaxParticipantes').value = 32;
+        document.getElementById('eventoLink').value        = '';
+        document.getElementById('eventoUbicacion').value   = '';
+        document.getElementById('errorEvento').classList.add('d-none');
+        modalEvento.show();
+    }
+
+    async function abrirModalEditar(id) {
+        const res = await fetch(`/api/eventos/${id}`);
+        if (!res.ok) return;
+        const ev = await res.json();
+
+        document.getElementById('modalTitulo').textContent          = 'Editar evento';
+        document.getElementById('eventoId').value                   = ev.id;
+        document.getElementById('eventoTitulo').value               = ev.title;
+        document.getElementById('eventoDescripcion').value          = ev.description;
+        document.getElementById('eventoJuego').value                = ev.gameId;
+        document.getElementById('eventoTipo').value                 = ev.eventType;
+        document.getElementById('eventoEstado').value               = ev.status;
+        document.getElementById('eventoInicio').value               = ev.startDate?.substring(0, 16);
+        document.getElementById('eventoFin').value                  = ev.endDate?.substring(0, 16);
+        document.getElementById('eventoMaxParticipantes').value     = ev.maxParticipants;
+        document.getElementById('eventoLink').value                 = ev.onlineLink || '';
+        document.getElementById('eventoUbicacion').value            = ev.location || '';
+        document.getElementById('errorEvento').classList.add('d-none');
+        modalEvento.show();
+    }
+
+    async function guardarEvento() {
+        const id      = document.getElementById('eventoId').value;
+        const titulo  = document.getElementById('eventoTitulo').value.trim();
+        const gameId  = document.getElementById('eventoJuego').value;
+        const errDiv  = document.getElementById('errorEvento');
+
+        if (!titulo || !gameId) {
+            errDiv.textContent = 'El título y el juego son obligatorios.';
+            errDiv.classList.remove('d-none');
+            return;
+        }
+
+        const body = {
+            title:           titulo,
+            description:     document.getElementById('eventoDescripcion').value.trim(),
+            gameId:          gameId,
+            eventType:       document.getElementById('eventoTipo').value,
+            status:          document.getElementById('eventoEstado').value,
+            startDate:       new Date(document.getElementById('eventoInicio').value).toISOString(),
+            endDate:         new Date(document.getElementById('eventoFin').value).toISOString(),
+            maxParticipants: parseInt(document.getElementById('eventoMaxParticipantes').value),
+            onlineLink:      document.getElementById('eventoLink').value.trim() || null,
+            location:        document.getElementById('eventoUbicacion').value.trim() || null,
+            organizerId:     'api'
+        };
+
+        const url    = id ? `/api/eventos/${id}` : '/api/eventos';
+        const method = id ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            errDiv.textContent = data.mensaje || 'Error al guardar.';
+            errDiv.classList.remove('d-none');
+            return;
+        }
+
+        modalEvento.hide();
+        todosLosEventos = [];
+        mapaJuegos      = {};
+        document.getElementById('cargando').classList.remove('d-none');
+        document.getElementById('contenedorEventos').innerHTML = '';
+        cargarDatos();
+    }
+
+    function abrirModalEliminar(id, titulo) {
+        document.getElementById('idEliminar').value          = id;
+        document.getElementById('tituloEliminar').textContent = titulo;
+        modalEliminar.show();
+    }
+
+    async function confirmarEliminar() {
+        const id = document.getElementById('idEliminar').value;
+        await fetch(`/api/eventos/${id}`, { method: 'DELETE' });
+        modalEliminar.hide();
+        todosLosEventos = [];
+        mapaJuegos      = {};
+        document.getElementById('cargando').classList.remove('d-none');
+        document.getElementById('contenedorEventos').innerHTML = '';
+        cargarDatos();
+    }
+
+    cargarDatos();
+</script>
 }

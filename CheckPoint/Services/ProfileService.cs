@@ -29,9 +29,15 @@ namespace CheckPoint.Services
             await _profiles.InsertOneAsync(profile);
         }
 
+        public async Task<List<Profile>> GetAllAsync() =>
+            await _profiles.Find(_ => true).ToListAsync();
+
         public async Task UpdateAsync(string id, Profile profile)
         {
             await _profiles.ReplaceOneAsync(p => p.Id == id, profile);
         }
+
+        public async Task DeleteAsync(string id) =>
+            await _profiles.DeleteOneAsync(p => p.Id == id);
     }
 }

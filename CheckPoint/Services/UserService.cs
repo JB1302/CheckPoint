@@ -36,5 +36,8 @@ namespace CheckPoint.Services
 
         public async Task<bool> ExistsByUsernameAsync(string username) =>
             await _users.Find(u => u.Username == username).AnyAsync();
+
+        public async Task DeleteAsync(string id) =>
+            await _users.DeleteOneAsync(u => u.Id == id);
     }
 }
