@@ -1,0 +1,15 @@
+@model CheckPoint.Models.Reports.Report
+@{
+    ViewData["Title"] = "Crear Reporte";
+}
+
+<h1>Crear Reporte</h1>
+
+<form asp-action="Create" method="post">
+    @await Html.PartialAsync("_ReportForm", Model)
+    
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Enviar Reporte</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

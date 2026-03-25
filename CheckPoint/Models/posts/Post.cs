@@ -39,5 +39,19 @@ namespace CheckPoint.Models.Posts
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         [DisplayName("Fecha de actualización")]
         public DateTime? UpdatedAt { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Autor")]
+        public string AuthorName { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Comentarios")]
+        public int CommentsCount => Comments?.Count ?? 0;
+
+        [BsonIgnore]
+        public List<CheckPoint.Models.Comments.Comment>? Comments { get; set; } = new();
+
+        [BsonIgnore]
+        public List<CheckPoint.Models.Reactions.Reaction>? Reactions { get; set; } = new();
     }
 }

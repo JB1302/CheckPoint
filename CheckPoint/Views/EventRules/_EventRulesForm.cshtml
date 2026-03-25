@@ -1,0 +1,31 @@
+@model CheckPoint.Models.EventRules.EventRules
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" required />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+</div>
+
+<div class="mb-3">
+    <label asp-for="EventId" class="form-label">Evento</label>
+    <select asp-for="EventId" class="form-control" required>
+        <option value="">Selecciona un evento</option>
+        @foreach (var eventItem in ViewBag.Events)
+        {
+            <option value="@eventItem.Id">@eventItem.Title</option>
+        }
+    </select>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Priority" class="form-label"></label>
+    <select asp-for="Priority" class="form-control">
+        <option value="1">Baja</option>
+        <option value="2">Media</option>
+        <option value="3">Alta</option>
+    </select>
+</div>

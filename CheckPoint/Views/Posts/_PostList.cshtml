@@ -1,0 +1,17 @@
+@model IEnumerable<CheckPoint.Models.Posts.Post>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No hay publicaciones aún. ¡Sé el primero en comentar!
+    </div>
+}
+else
+{
+    <div class="posts-list">
+        @foreach (var post in Model)
+        {
+            @await Html.PartialAsync("_PostCard", post)
+        }
+    </div>
+}

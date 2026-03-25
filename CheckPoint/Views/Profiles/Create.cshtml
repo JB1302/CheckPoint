@@ -1,0 +1,14 @@
+@model CheckPoint.Models.Profiles.Profile
+@{
+    ViewData["Title"] = "Crear Perfil";
+}
+
+<h1>Completa tu Perfil</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @await Html.PartialAsync("_ProfileForm", Model)
+    
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar Perfil</button>
+    </div>
+</form>

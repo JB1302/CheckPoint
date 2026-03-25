@@ -1,0 +1,43 @@
+@model List<CheckPoint.Models.Events.Events>
+@{
+    ViewData["Title"] = "Mis Eventos";
+    var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+}
+
+<h1>Mis Eventos</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#organized">Eventos que Organizo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#registered">Eventos Registrados</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <div class="tab-pane active" id="organized">
+                <div class="row">
+                    @foreach (var eventItem in Model.Where(e => e.OrganizerId == userId))
+                    {
+                        <div class="col-md-4 mb-4">
+                            @await Html.PartialAsync("_EventCard", eventItem)
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="tab-pane" id="registered">
+                <div class="row">
+                    @foreach (var eventItem in Model.Where(e => e.OrganizerId != userId))
+                    {
+                        <div class="col-md-4 mb-4">
+                            @await Html.PartialAsync("_EventCard", eventItem)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

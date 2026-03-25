@@ -1,0 +1,32 @@
+@model IEnumerable<CheckPoint.Models.EventRules.EventRules>
+@{
+    ViewData["Title"] = "Reglas de Eventos";
+}
+
+<h1>Reglas de Eventos</h1>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">Crear Regla</a>
+</div>
+
+<div class="row">
+    @foreach (var rule in Model)
+    {
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>@rule.Name</h5>
+                </div>
+                <div class="card-body">
+                    <p>@rule.Description</p>
+                    <p><strong>Evento ID:</strong> @rule.EventId</p>
+                    <p><strong>Prioridad:</strong> @rule.Priority</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@rule.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@rule.Id" class="btn btn-sm btn-info">Detalles</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

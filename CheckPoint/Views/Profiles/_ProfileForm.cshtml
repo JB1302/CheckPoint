@@ -1,0 +1,32 @@
+@model CheckPoint.Models.Profiles.Profile
+
+<div class="mb-3">
+    <label asp-for="DisplayName" class="form-label"></label>
+    <input asp-for="DisplayName" class="form-control" required />
+    <span asp-validation-for="DisplayName" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Bio" class="form-label"></label>
+    <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Country" class="form-label"></label>
+    <input asp-for="Country" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Website" class="form-label"></label>
+    <input asp-for="Website" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label asp-for="AvatarUrl" class="form-label"></label>
+    <input asp-for="AvatarUrl" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Juegos Favoritos</label>
+    @await Html.PartialAsync("_FavoriteGamesSelector", Model)
+</div>

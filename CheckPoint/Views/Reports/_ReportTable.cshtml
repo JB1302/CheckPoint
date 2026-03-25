@@ -1,0 +1,38 @@
+@model List<CheckPoint.ViewModels.ReportDetailsViewModel>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Reportado por</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in Model)
+            {
+                <tr>
+                    <td>@report.Title</td>
+                    <td>@report.Type</td>
+                    <td>@report.ReporterName</td>
+                    <td>@report.CreatedAt.ToString("dd/MM/yyyy")</td>
+                    <td>@await Html.PartialAsync("_ReportStatusBadge", report.Status)</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@report.Id" class="btn btn-sm btn-info">Detalles</a>
+                        @if (User.IsInRole("Admin") && report.Status == "Pending")
+                        {
+                            <form asp-action="Resolve" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@report.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">Resolver</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

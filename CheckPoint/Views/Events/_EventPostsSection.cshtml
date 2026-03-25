@@ -1,0 +1,24 @@
+@model IEnumerable<CheckPoint.Models.Posts.Post>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Publicaciones del Evento</h5>
+    </div>
+    <div class="card-body">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form asp-controller="Posts" asp-action="Create" method="post" class="mb-4">
+                <input type="hidden" name="eventId" value="@ViewBag.EventId" />
+                <textarea name="content" class="form-control mb-2" rows="3" placeholder="Escribe algo..."></textarea>
+                <button type="submit" class="btn btn-primary">Publicar</button>
+            </form>
+        }
+        
+        <div class="posts-list">
+            @foreach (var post in Model)
+            {
+                @await Html.PartialAsync("_PostCard", post)
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+@model CheckPoint.Models.Users.User
+@{
+    ViewData["Title"] = $"Perfil de {Model.Username}";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2>@Model.Username</h2>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Fecha Registro:</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Estado:</dt>
+            <dd class="col-sm-9">@await Html.PartialAsync("_UserStatusBadge", Model.IsActive ? "Active" : "Suspended")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</div>

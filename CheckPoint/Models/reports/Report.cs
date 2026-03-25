@@ -49,5 +49,13 @@ namespace CheckPoint.Models.Reports
         [Required]
         [DisplayName("Fecha de creación")]
         public DateTime CreatedAt { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Descripción")]
+        public string Description { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Notas de resolución")]
+        public string? ResolutionNotes { get; set; }
     }
 }

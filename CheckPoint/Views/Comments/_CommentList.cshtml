@@ -1,0 +1,8 @@
+@model IEnumerable<CheckPoint.Models.Comments.Comment>
+
+<div class="comments-list">
+    @foreach (var comment in Model)
+    {
+        @await Html.PartialAsync("_CommentItem", comment)
+    }
+</div>

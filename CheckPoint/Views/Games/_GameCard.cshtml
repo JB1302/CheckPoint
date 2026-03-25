@@ -1,0 +1,15 @@
+@model CheckPoint.Models.Games.Game
+
+<div class="card h-100">
+    @if (!string.IsNullOrEmpty(Model.CoverImage))
+    {
+        <img src="@Model.CoverImage" class="card-img-top" alt="@Model.Name">
+    }
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">@(string.IsNullOrWhiteSpace(Model.Description) ? "" : Model.Description.Length > 100 ? Model.Description.Substring(0, 100) + "..." : Model.Description)</p>
+        <p><strong>Género:</strong> @Model.Genre</p>
+        <p><strong>Plataforma:</strong> @(Model.Platforms?.FirstOrDefault() ?? "N/A")</p>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Ver Detalles</a>
+    </div>
+</div>

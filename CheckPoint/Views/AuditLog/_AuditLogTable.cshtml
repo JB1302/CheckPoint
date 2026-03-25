@@ -1,0 +1,64 @@
+@model IEnumerable<CheckPoint.Models.AuditLogs.AuditLog>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Entidad</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>@log.Timestamp.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>@log.UserName</td>
+                    <td>
+                        <span class="badge @(log.Action == "Create" ? "bg-success" : 
+                                         log.Action == "Update" ? "bg-warning" : 
+                                         log.Action == "Delete" ? "bg-danger" : "bg-info")">
+                            @log.Action
+                        </span>
+                    </td>
+                    <td>@log.EntityType</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-link" onclick="showDetails('@log.Id')">
+                            Ver detalles
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Cambio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detailsContent">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDetails(logId) {
+        fetch(`/AuditLog/Details/${logId}`)
+            .then(response => response.json())
+            .then(data => {
+                const content = document.getElementById('detailsContent');
+                content.innerHTML = `
+                    <pre>${JSON.stringify(data.details, null, 2)}</pre>
+                `;
+                new bootstrap.Modal(document.getElementById('detailsModal')).show();
+            });
+    }
+</script>

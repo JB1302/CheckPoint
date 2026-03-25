@@ -1,0 +1,51 @@
+@model CheckPoint.Models.Reports.Report
+@{
+    ViewData["Title"] = "Reporte";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2>Reporte</h2>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Tipo:</dt>
+            <dd class="col-sm-9">@Model.TargetType</dd>
+            
+            <dt class="col-sm-3">Motivo:</dt>
+            <dd class="col-sm-9">@Model.Reason</dd>
+            
+            <dt class="col-sm-3">Reportado por:</dt>
+            <dd class="col-sm-9">@Model.ReporterId</dd>
+            
+            <dt class="col-sm-3">Contenido reportado ID:</dt>
+            <dd class="col-sm-9">@Model.TargetId</dd>
+            
+            <dt class="col-sm-3">Fecha Reporte:</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            
+            <dt class="col-sm-3">Estado:</dt>
+            <dd class="col-sm-9">@await Html.PartialAsync("_ReportStatusBadge", Model.Status)</dd>
+            
+            @if (!string.IsNullOrEmpty(Model.ResolutionNotes))
+            {
+                <dt class="col-sm-3">Notas de Resolución:</dt>
+                <dd class="col-sm-9">@Model.ResolutionNotes</dd>
+            }
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        
+        @if (User.IsInRole("Admin") && Model.Status == "Pending")
+        {
+            <form asp-action="Resolve" method="post" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="input-group mt-2">
+                    <input type="text" name="resolutionNotes" class="form-control" placeholder="Notas de resolución..." />
+                    <button type="submit" class="btn btn-success">Resolver Reporte</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>

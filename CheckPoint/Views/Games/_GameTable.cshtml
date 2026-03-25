@@ -1,0 +1,31 @@
+@model IEnumerable<CheckPoint.Models.Games.Game>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Género</th>
+                <th>Plataforma</th>
+                <th>Fecha Lanzamiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td>@game.Name</td>
+                    <td>@game.Genre</td>
+                    <td>@game.Platform</td>
+                    <td>@game.ReleaseDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@game.Id" class="btn btn-sm btn-info">Detalles</a>
+                        <a asp-action="Edit" asp-route-id="@game.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Manage" asp-route-id="@game.Id" class="btn btn-sm btn-secondary">Gestionar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

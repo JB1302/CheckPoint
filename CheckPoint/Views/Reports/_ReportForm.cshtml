@@ -1,0 +1,24 @@
+@model CheckPoint.Models.Reports.Report
+
+<div class="mb-3">
+    <label asp-for="TargetType" class="form-label"></label>
+    <select asp-for="TargetType" class="form-control" required>
+        <option value="">Selecciona un tipo</option>
+        <option value="User">Usuario</option>
+        <option value="Post">Publicación</option>
+        <option value="Comment">Comentario</option>
+        <option value="Event">Evento</option>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label asp-for="TargetId" class="form-label">ID del contenido reportado</label>
+    <input asp-for="TargetId" class="form-control" required />
+    <small class="form-text text-muted">Ingresa el ID del usuario, publicación, comentario o evento que estás reportando.</small>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="5" required></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>

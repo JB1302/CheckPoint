@@ -1,0 +1,18 @@
+@model CheckPoint.Models.Notifications.Notification
+
+<div class="list-group-item @(Model.IsRead ? "" : "list-group-item-primary")">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <strong>@Model.Type</strong>
+            <p class="mb-1">@Model.Message</p>
+            <small class="text-muted">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+        </div>
+        @if (!Model.IsRead)
+        {
+            <form asp-action="MarkAsRead" method="post" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-sm btn-primary">Marcar como leída</button>
+            </form>
+        }
+    </div>
+</div>

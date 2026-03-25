@@ -1,0 +1,6 @@
+@model dynamic
+
+<form asp-controller="Registrations" asp-action="CancelRegistration" method="post" class="d-inline">
+    <input type="hidden" name="eventId" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Cancelar registro?')">Cancelar</button>
+</form>

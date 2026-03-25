@@ -1,0 +1,37 @@
+@model CheckPoint.Models.Games.Game
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" required />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Genre" class="form-label"></label>
+    <input asp-for="Genre" class="form-control" required />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Platform" class="form-label"></label>
+    <input asp-for="Platform" class="form-control" required />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Developer" class="form-label"></label>
+    <input asp-for="Developer" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label asp-for="ReleaseDate" class="form-label"></label>
+    <input asp-for="ReleaseDate" type="date" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+</div>
+
+<div class="mb-3">
+    <label asp-for="CoverImage" class="form-label"></label>
+    <input asp-for="CoverImage" type="file" class="form-control" accept="image/*" />
+</div>

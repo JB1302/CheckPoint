@@ -1,0 +1,8 @@
+@model List<CheckPoint.ViewModels.RegistrationViewModel>
+@{
+    ViewData["Title"] = "Mis Registros";
+}
+
+<h1>Mis Registros</h1>
+
+@await Html.PartialAsync("_RegistrationTable", Model)

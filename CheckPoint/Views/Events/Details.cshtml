@@ -1,0 +1,30 @@
+@model CheckPoint.ViewModels.EventDetailViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>@Model.Title</h1>
+        <p class="lead">@Model.Description</p>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Detalles del Evento</h5>
+                <p><strong>Juego:</strong> @Model.GameName</p>
+                <p><strong>Fecha y Hora:</strong> @Model.EventDate.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>Ubicación:</strong> @Model.Location</p>
+                <p><strong>Organizador:</strong> @Model.OrganizerName</p>
+                <p><strong>Capacidad Máxima:</strong> @Model.MaxParticipants</p>
+                <p><strong>Participantes Actuales:</strong> @Model.CurrentParticipants</p>
+            </div>
+        </div>
+        
+        @await Html.PartialAsync("_EventPostsSection", Model.Posts)
+    </div>
+    
+    <div class="col-md-4">
+        @await Html.PartialAsync("_EventDetailsSidebar", Model)
+        @await Html.PartialAsync("_EventRegistrationsSection", Model.Registrations)
+    </div>
+</div>

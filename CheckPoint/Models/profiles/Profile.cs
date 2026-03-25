@@ -18,6 +18,10 @@ namespace CheckPoint.Models.Profiles
         [DisplayName("Identificador del usuario")]
         public string UserId { get; set; } = string.Empty;
 
+        [BsonIgnore]
+        [DisplayName("Nombre de usuario")]
+        public string Username { get; set; } = string.Empty;
+
         [BsonElement("displayName")]
         [Required]
         [StringLength(100)]
@@ -38,6 +42,14 @@ namespace CheckPoint.Models.Profiles
         [StringLength(100)]
         [DisplayName("País")]
         public string? Country { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Website")]
+        public string? Website { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Fecha de miembro")]
+        public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("favoriteGameIds")]
         [DisplayName("Juegos favoritos")]

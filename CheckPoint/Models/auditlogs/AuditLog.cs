@@ -44,5 +44,13 @@ namespace CheckPoint.Models.AuditLogs
         [BsonElement("metadata")]
         [DisplayName("Metadatos")]
         public string? Metadata { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Timestamp")]
+        public DateTime Timestamp => CreatedAt;
+
+        [BsonIgnore]
+        [DisplayName("Nombre de usuario")]
+        public string UserName { get; set; } = string.Empty;
     }
 }

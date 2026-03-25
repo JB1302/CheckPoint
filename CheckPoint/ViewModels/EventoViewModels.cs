@@ -86,5 +86,20 @@ namespace CheckPoint.ViewModels
         public bool IsRegistered { get; set; }
         public bool CanRegister { get; set; }
         public bool IsOrganizer { get; set; }
+
+        // Aliases for views
+        public bool IsUserRegistered => IsRegistered;
+        public bool IsUserOrganizer => IsOrganizer;
+
+        // Convenience properties for views
+        public string Title => Event?.Title ?? "";
+        public string Description => Event?.Description ?? "";
+        public string GameName => Game?.Name ?? "";
+        public DateTime EventDate => Event?.StartDate ?? DateTime.UtcNow;
+        public string Location => Event?.Location ?? "";
+        public string OrganizerName => Event?.OrganizerId ?? "";
+        public int MaxParticipants => Event?.MaxParticipants ?? 0;
+        public int CurrentParticipants => Registrations?.Count ?? 0;
+        public string Id => Event?.Id ?? "";
     }
 }

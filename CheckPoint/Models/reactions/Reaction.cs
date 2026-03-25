@@ -35,6 +35,10 @@ namespace CheckPoint.Models.Reactions
         [DisplayName("Tipo de reacción")]
         public string ReactionType { get; set; } = string.Empty;
 
+        [BsonIgnore]
+        [DisplayName("Tipo")]
+        public string Type => ReactionType;
+
         [BsonElement("createdAt")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         [Required]
