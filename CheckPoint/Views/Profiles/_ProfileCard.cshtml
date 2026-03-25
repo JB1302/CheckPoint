@@ -1,24 +1,24 @@
-@model ProfileViewModel
+@model CheckPoint.Models.Profiles.Profile
 
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
-            @if (!string.IsNullOrEmpty(Model.Avatar))
+            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
             {
-                <img src="@Model.Avatar" class="img-fluid rounded-start" alt="@Model.Username">
+                <img src="@Model.AvatarUrl" class="img-fluid rounded-start" alt="@Model.DisplayName">
             }
             else
             {
                 <div class="bg-secondary text-center p-5">
-                    <span class="display-4">@Model.Username.Substring(0, 1).ToUpper()</span>
+                    <span class="display-4">@Model.DisplayName.Substring(0, 1).ToUpper()</span>
                 </div>
             }
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">@Model.Username</h5>
+                <h5 class="card-title">@Model.DisplayName</h5>
                 <p class="card-text">@Model.Bio</p>
-                <p class="card-text"><small class="text-muted">Miembro desde @Model.JoinedAt.ToString("dd/MM/yyyy")</small></p>
+                <p class="card-text"><small class="text-muted">Miembro desde @DateTime.UtcNow.ToString("dd/MM/yyyy")</small></p>
                 <a asp-action="Details" asp-route-id="@Model.UserId" class="btn btn-primary">Ver Perfil</a>
             </div>
         </div>

@@ -1,4 +1,4 @@
-@model IEnumerable<EventRuleViewModel>
+@model IEnumerable<CheckPoint.Models.EventRules.EventRules>
 @{
     ViewData["Title"] = "Reglas de Eventos";
 }
@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-body">
                     <p>@rule.Description</p>
-                    <p><strong>Evento:</strong> @rule.EventTitle</p>
+                    <p><strong>Evento ID:</strong> @rule.EventId</p>
                     <p><strong>Prioridad:</strong> @rule.Priority</p>
                 </div>
                 <div class="card-footer">

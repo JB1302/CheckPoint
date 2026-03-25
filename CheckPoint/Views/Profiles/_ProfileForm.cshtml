@@ -1,9 +1,9 @@
-@model dynamic
+@model CheckPoint.Models.Profiles.Profile
 
 <div class="mb-3">
-    <label asp-for="Username" class="form-label"></label>
-    <input asp-for="Username" class="form-control" required />
-    <span asp-validation-for="Username" class="text-danger"></span>
+    <label asp-for="DisplayName" class="form-label"></label>
+    <input asp-for="DisplayName" class="form-control" required />
+    <span asp-validation-for="DisplayName" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
@@ -12,8 +12,8 @@
 </div>
 
 <div class="mb-3">
-    <label asp-for="Location" class="form-label"></label>
-    <input asp-for="Location" class="form-control" />
+    <label asp-for="Country" class="form-label"></label>
+    <input asp-for="Country" class="form-control" />
 </div>
 
 <div class="mb-3">
@@ -22,11 +22,11 @@
 </div>
 
 <div class="mb-3">
-    <label asp-for="Avatar" class="form-label"></label>
-    <input asp-for="Avatar" type="file" class="form-control" accept="image/*" />
+    <label asp-for="AvatarUrl" class="form-label"></label>
+    <input asp-for="AvatarUrl" class="form-control" />
 </div>
 
 <div class="mb-3">
     <label class="form-label">Juegos Favoritos</label>
-    @await Html.PartialAsync("_FavoriteGamesSelector", Model.FavoriteGames)
+    @await Html.PartialAsync("_FavoriteGamesSelector", Model)
 </div>

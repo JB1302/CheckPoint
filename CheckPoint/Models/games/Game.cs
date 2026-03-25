@@ -30,6 +30,26 @@ namespace CheckPoint.Models.Games
         [DisplayName("Plataformas")]
         public List<string> Platforms { get; set; } = new List<string>();
 
+        [BsonIgnore]
+        [DisplayName("Plataforma")]
+        public string Platform => Platforms?.FirstOrDefault() ?? string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Imagen de portada")]
+        public string CoverImage { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Descripción")]
+        public string Description { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Desarrollador")]
+        public string Developer { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Fecha de lanzamiento")]
+        public DateTime ReleaseDate { get; set; } = DateTime.UtcNow;
+
         [BsonElement("isActive")]
         [Required]
         [DisplayName("Activo")]

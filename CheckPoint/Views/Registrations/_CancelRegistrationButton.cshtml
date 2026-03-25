@@ -1,4 +1,4 @@
-@model EventViewModel
+@model dynamic
 
 <form asp-controller="Registrations" asp-action="CancelRegistration" method="post" class="d-inline">
     <input type="hidden" name="eventId" value="@Model.Id" />

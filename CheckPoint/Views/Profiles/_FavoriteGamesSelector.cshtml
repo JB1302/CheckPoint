@@ -1,10 +1,10 @@
-@model IEnumerable<GameViewModel>
+@model CheckPoint.Models.Profiles.Profile
 
 <div class="favorite-games-selector">
     <div class="row">
-        @foreach (var game in ViewBag.AllGames)
+        @foreach (var game in ViewBag.AllGames as IEnumerable<CheckPoint.Models.Games.Game> ?? Enumerable.Empty<CheckPoint.Models.Games.Game>())
         {
-            var isFavorite = Model?.Any(g => g.Id == game.Id) ?? false;
+            var isFavorite = Model?.FavoriteGameIds?.Contains(game.Id) ?? false;
             <div class="col-md-3 mb-2">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="FavoriteGameIds" value="@game.Id" id="game_@game.Id" @(isFavorite ? "checked" : "") />

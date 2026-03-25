@@ -37,5 +37,17 @@ namespace CheckPoint.Models.EventRules
         [BsonElement("minRank")]
         [DisplayName("Rango mínimo")]
         public string? MinRank { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Nombre")]
+        public string Name { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Descripción")]
+        public string Description { get; set; } = string.Empty;
+
+        [BsonIgnore]
+        [DisplayName("Prioridad")]
+        public int Priority { get; set; } = 1;
     }
 }

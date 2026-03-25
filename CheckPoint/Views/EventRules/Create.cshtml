@@ -1,4 +1,4 @@
-@model EventRuleCreateViewModel
+@model CheckPoint.Models.EventRules.EventRules
 @{
     ViewData["Title"] = "Crear Regla";
 }
@@ -6,6 +6,7 @@
 <h1>Crear Nueva Regla</h1>
 
 <form asp-action="Create" method="post">
+    <input type="hidden" asp-for="EventId" />
     @await Html.PartialAsync("_EventRulesForm", Model)
     
     <div class="mt-3">

@@ -39,5 +39,9 @@ namespace CheckPoint.Models.Comments
         [Required]
         [DisplayName("Eliminado")]
         public bool IsDeleted { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Autor")]
+        public string AuthorName { get; set; } = string.Empty;
     }
 }

@@ -1,6 +1,6 @@
-@model PostViewModel
+@model CheckPoint.Models.Posts.Post
 
-@if (Model.Reactions.Any())
+@if (Model.Reactions != null && Model.Reactions.Any())
 {
     <div class="reaction-summary mt-1">
         <small class="text-muted">

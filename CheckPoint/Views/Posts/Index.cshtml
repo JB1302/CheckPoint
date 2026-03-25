@@ -1,9 +1,9 @@
-@model PostsByEventViewModel
+@model IEnumerable<CheckPoint.Models.Posts.Post>
 @{
-    ViewData["Title"] = $"Publicaciones - {Model.EventTitle}";
+    ViewData["Title"] = $"Publicaciones - {ViewBag.EventTitle}";
 }
 
-<h1>Publicaciones del Evento: @Model.EventTitle</h1>
+<h1>Publicaciones del Evento: @ViewBag.EventTitle</h1>
 
 <div class="row">
     <div class="col-md-12">
@@ -12,7 +12,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <form asp-action="Create" method="post">
-                        <input type="hidden" name="eventId" value="@Model.EventId" />
+                        <input type="hidden" name="eventId" value="@ViewBag.EventId" />
                         <textarea name="content" class="form-control mb-2" rows="3" placeholder="Escribe una publicación..."></textarea>
                         <button type="submit" class="btn btn-primary">Publicar</button>
                     </form>
@@ -21,7 +21,7 @@
         }
         
         <div class="posts-list">
-            @foreach (var post in Model.Posts)
+            @foreach (var post in Model)
             {
                 @await Html.PartialAsync("_PostCard", post)
             }

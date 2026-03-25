@@ -1,14 +1,14 @@
-@model PostViewModel
+@model CheckPoint.Models.Posts.Post
 
 <div class="btn-group" role="group">
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="react(@Model.Id, 'Like')">
-        👍 Like (@Model.Reactions.Count(r => r.Type == "Like"))
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="react('@Model.Id', 'Like')">
+        👍 Like (@Model.Reactions?.Count(r => r.ReactionType == "Like") ?? 0)
     </button>
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="react(@Model.Id, 'Love')">
-        ❤️ Love (@Model.Reactions.Count(r => r.Type == "Love"))
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="react('@Model.Id', 'Love')">
+        ❤️ Love (@Model.Reactions?.Count(r => r.ReactionType == "Love") ?? 0)
     </button>
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="react(@Model.Id, 'Funny')">
-        😂 Funny (@Model.Reactions.Count(r => r.Type == "Funny"))
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="react('@Model.Id', 'Funny')">
+        😂 Funny (@Model.Reactions?.Count(r => r.ReactionType == "Funny") ?? 0)
     </button>
 </div>
 

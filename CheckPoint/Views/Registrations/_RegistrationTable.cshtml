@@ -1,4 +1,4 @@
-@model IEnumerable<RegistrationViewModel>
+@model IEnumerable<CheckPoint.Models.Registrations.Registration>
 
 <div class="table-responsive">
     <table class="table table-striped">
@@ -16,7 +16,7 @@
                 <tr>
                     <td>
                         <a asp-controller="Events" asp-action="Details" asp-route-id="@registration.EventId">
-                            @registration.EventTitle
+                            @registration.EventId
                         </a>
                     </td>
                     <td>@registration.RegisteredAt.ToString("dd/MM/yyyy HH:mm")</td>

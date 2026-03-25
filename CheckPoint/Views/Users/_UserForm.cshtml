@@ -1,4 +1,4 @@
-@model dynamic
+@model CheckPoint.Models.Users.User
 
 <div class="mb-3">
     <label asp-for="Username" class="form-label"></label>
@@ -13,9 +13,9 @@
 </div>
 
 <div class="mb-3">
-    <label asp-for="Status" class="form-label"></label>
-    <select asp-for="Status" class="form-control">
-        <option value="Active">Activo</option>
-        <option value="Suspended">Suspendido</option>
+    <label asp-for="IsActive" class="form-label"></label>
+    <select asp-for="IsActive" class="form-control">
+        <option value="true">Activo</option>
+        <option value="false">Suspendido</option>
     </select>
 </div>

@@ -35,6 +35,10 @@ namespace CheckPoint.Models.Notifications
         [DisplayName("Mensaje")]
         public string Message { get; set; } = string.Empty;
 
+        [BsonIgnore]
+        [DisplayName("Título")]
+        public string Title { get; set; } = string.Empty;
+
         [BsonElement("isRead")]
         [Required]
         [DisplayName("Leída")]

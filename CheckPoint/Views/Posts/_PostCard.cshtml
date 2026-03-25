@@ -1,8 +1,8 @@
-@model PostViewModel
+@model CheckPoint.Models.Posts.Post
 
 <div class="card mb-3">
     <div class="card-header">
-        <strong>@Model.AuthorName</strong>
+        <strong>@Model.AuthorId</strong>
         <small class="text-muted float-end">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
     </div>
     <div class="card-body">
@@ -15,14 +15,14 @@
         
         @if (User.Identity.IsAuthenticated)
         {
-            <button class="btn btn-sm btn-link" onclick="toggleComments(@Model.Id)">Comentarios (@Model.CommentsCount)</button>
+            <button class="btn btn-sm btn-link" onclick="toggleComments('@Model.Id')">Comentarios</button>
             <div id="comments-@Model.Id" style="display:none;" class="mt-3">
                 @await Html.PartialAsync("_CommentList", Model.Comments)
                 @await Html.PartialAsync("_CommentForm", Model.Id)
             </div>
         }
         
-        @if (User.Identity.Name == Model.AuthorName || User.IsInRole("Admin"))
+        @if (User.Identity.Name == Model.AuthorId || User.IsInRole("Admin"))
         {
             <div class="float-end">
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Editar</a>

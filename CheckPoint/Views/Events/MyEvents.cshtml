@@ -1,6 +1,7 @@
-@model IEnumerable<EventViewModel>
+@model List<CheckPoint.Models.Events.Events>
 @{
     ViewData["Title"] = "Mis Eventos";
+    var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
 }
 
 <h1>Mis Eventos</h1>
@@ -19,7 +20,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="organized">
                 <div class="row">
-                    @foreach (var eventItem in Model.Where(e => e.IsOrganizer))
+                    @foreach (var eventItem in Model.Where(e => e.OrganizerId == userId))
                     {
                         <div class="col-md-4 mb-4">
                             @await Html.PartialAsync("_EventCard", eventItem)
@@ -29,7 +30,7 @@
             </div>
             <div class="tab-pane" id="registered">
                 <div class="row">
-                    @foreach (var eventItem in Model.Where(e => !e.IsOrganizer && e.IsUserRegistered))
+                    @foreach (var eventItem in Model.Where(e => e.OrganizerId != userId))
                     {
                         <div class="col-md-4 mb-4">
                             @await Html.PartialAsync("_EventCard", eventItem)
