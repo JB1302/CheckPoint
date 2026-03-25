@@ -3,13 +3,15 @@
     ViewData["Title"] = "Crear Usuario";
 }
 
-<h1>Crear Nuevo Usuario</h1>
+<h1 class="text-white">Crear Nuevo Usuario</h1>
 
 <form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
     @await Html.PartialAsync("_UserForm", Model)
-    
+
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Crear</button>
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        <a asp-controller="Users" asp-action="Index" class="btn btn-outline-light">Volver a Usuarios</a>
     </div>
 </form>

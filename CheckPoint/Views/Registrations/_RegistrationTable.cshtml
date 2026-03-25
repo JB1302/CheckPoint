@@ -1,7 +1,7 @@
 @model IEnumerable<CheckPoint.Models.Registrations.Registration>
 
 <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped table-dark">
         <thead>
             <tr>
                 <th>Evento</th>
@@ -24,7 +24,8 @@
                     <td>
                         @if (registration.Status == "Confirmed")
                         {
-                            <form asp-action="CancelRegistration" method="post">
+                            <form asp-controller="Registrations" asp-action="Cancel" method="post">
+                                @Html.AntiForgeryToken()
                                 <input type="hidden" name="eventId" value="@registration.EventId" />
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Cancelar registro?')">
                                     Cancelar

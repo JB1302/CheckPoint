@@ -41,5 +41,9 @@ namespace CheckPoint.Services
         {
             await _posts.DeleteOneAsync(p => p.Id == id);
         }
+        public async Task<List<Post>> GetAllAsync()
+        {
+            return await _posts.Find(_ => true).ToListAsync();
+        }
     }
 }

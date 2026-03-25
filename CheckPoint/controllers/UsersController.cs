@@ -164,47 +164,18 @@ namespace CheckPoint.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User model, string password)
+        public async Task<IActionResult> Create(User model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            if (await _userService.ExistsByEmailAsync(model.Email))
-            {
-                ModelState.AddModelError("Email", "Email already exists.");
-                return View(model);
-            }
-
-            if (await _userService.ExistsByUsernameAsync(model.Username))
-            {
-                ModelState.AddModelError("Username", "Username already exists.");
-                return View(model);
-            }
-
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                ModelState.AddModelError(string.Empty, "Password is required.");
-                return View(model);
-            }
-
             model.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
-            model.PasswordHash = BCryptNet.HashPassword(password);
             model.CreatedAt = DateTime.UtcNow;
 
             await _userService.CreateAsync(model);
-
-            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-            if (!string.IsNullOrWhiteSpace(adminUserId))
-            {
-                await _auditLogService.LogAsync(
-                    adminUserId,
-                    "CreateUser",
-                    "User",
-                    model.Id);
-            }
-
             return RedirectToAction(nameof(Index));
         }
+
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -223,46 +194,17 @@ namespace CheckPoint.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, User model)
+        public async Task<IActionResult> Edit(User model)
         {
-            if (id != model.Id)
-                return BadRequest();
-
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var existing = await _userService.GetByIdAsync(id);
+            var existing = await _userService.GetByIdAsync(model.Id);
             if (existing == null)
                 return NotFound();
 
-            var emailOwner = await _userService.GetByEmailAsync(model.Email);
-            if (emailOwner != null && emailOwner.Id != model.Id)
-            {
-                ModelState.AddModelError("Email", "Email already exists.");
-                return View(model);
-            }
+            existing.Username = model.Username;
+            existing.Email = model.Email;
+            existing.IsActive = model.IsActive;
 
-            var usernameOwner = await _userService.GetByUsernameAsync(model.Username);
-            if (usernameOwner != null && usernameOwner.Id != model.Id)
-            {
-                ModelState.AddModelError("Username", "Username already exists.");
-                return View(model);
-            }
-
-            model.CreatedAt = existing.CreatedAt;
-            model.PasswordHash = existing.PasswordHash;
-
-            await _userService.UpdateAsync(id, model);
-
-            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-            if (!string.IsNullOrWhiteSpace(adminUserId))
-            {
-                await _auditLogService.LogAsync(
-                    adminUserId,
-                    "UpdateUser",
-                    "User",
-                    model.Id);
-            }
+            await _userService.UpdateAsync(model.Id, existing);
 
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }

@@ -23,26 +23,26 @@ namespace CheckPoint.Services
             Dictionary<string, string>? newValues = null,
             string ipAddress = "",
             string userAgent = "")
-        {
-            var metadataObject = new
+                {
+                    var metadata = new BsonDocument
             {
-                OldValues = oldValues,
-                NewValues = newValues,
-                IpAddress = ipAddress,
-                UserAgent = userAgent
+                { "oldValues", oldValues != null ? new BsonDocument(oldValues) : BsonNull.Value },
+                { "newValues", newValues != null ? new BsonDocument(newValues) : BsonNull.Value },
+                { "ipAddress", ipAddress ?? string.Empty },
+                { "userAgent", userAgent ?? string.Empty }
             };
 
-            await _auditLogs.InsertOneAsync(new AuditLog
-            {
-                Id = ObjectId.GenerateNewId().ToString(),
-                UserId = userId,
-                Action = action,
-                EntityType = entityType,
-                EntityId = entityId,
-                CreatedAt = DateTime.UtcNow,
-                Metadata = JsonSerializer.Serialize(metadataObject)
-            });
-        }
+                    await _auditLogs.InsertOneAsync(new AuditLog
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        UserId = userId,
+                        Action = action,
+                        EntityType = entityType,
+                        EntityId = entityId,
+                        CreatedAt = DateTime.UtcNow,
+                        Metadata = metadata
+                    });
+                }
 
         public async Task<List<AuditLog>> GetAllAsync()
         {

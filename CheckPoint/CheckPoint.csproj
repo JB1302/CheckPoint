@@ -9,30 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Views\Comments\**" />
-	  <Compile Remove="Views\EventRules\**" />
-	  <Compile Remove="Views\Posts\**" />
-	  <Compile Remove="Views\Profiles\**" />
-	  <Compile Remove="Views\Reactions\**" />
-	  <Compile Remove="Views\Registrations\**" />
-	  <Content Remove="Views\Comments\**" />
-	  <Content Remove="Views\EventRules\**" />
-	  <Content Remove="Views\Posts\**" />
-	  <Content Remove="Views\Profiles\**" />
-	  <Content Remove="Views\Reactions\**" />
-	  <Content Remove="Views\Registrations\**" />
-	  <EmbeddedResource Remove="Views\Comments\**" />
-	  <EmbeddedResource Remove="Views\EventRules\**" />
-	  <EmbeddedResource Remove="Views\Posts\**" />
-	  <EmbeddedResource Remove="Views\Profiles\**" />
-	  <EmbeddedResource Remove="Views\Reactions\**" />
-	  <EmbeddedResource Remove="Views\Registrations\**" />
-	  <None Remove="Views\Comments\**" />
-	  <None Remove="Views\EventRules\**" />
-	  <None Remove="Views\Posts\**" />
-	  <None Remove="Views\Profiles\**" />
-	  <None Remove="Views\Reactions\**" />
-	  <None Remove="Views\Registrations\**" />
+	  <None Include="CheckPoint.sln" />
 	</ItemGroup>
 
 	<ItemGroup>

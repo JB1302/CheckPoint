@@ -1,6 +1,9 @@
-@model dynamic
+@model CheckPoint.Models.Registrations.Registration
 
-<form asp-controller="Registrations" asp-action="CancelRegistration" method="post" class="d-inline">
-    <input type="hidden" name="eventId" value="@Model.Id" />
-    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Cancelar registro?')">Cancelar</button>
+<form asp-controller="Registrations" asp-action="Cancel" method="post" class="d-inline">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="eventId" value="@Model.EventId" />
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Cancelar registro?')">
+        Cancelar
+    </button>
 </form>
