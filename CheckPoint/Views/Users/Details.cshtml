@@ -3,20 +3,20 @@
     ViewData["Title"] = $"Perfil de {Model.Username}";
 }
 
-<div class="card">
-    <div class="card-header">
-        <h2>@Model.Username</h2>
+<div class="card bg-dark text-white">
+    <div class="card-header text-white">
+        <h2 class="text-white">@Model.Username</h2>
     </div>
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Email:</dt>
-            <dd class="col-sm-9">@Model.Email</dd>
+    <div class="card-body text-white">
+        <dl class="row text-white">
+            <dt class="col-sm-3 text-white">Email:</dt>
+            <dd class="col-sm-9 text-white">@Model.Email</dd>
 
-            <dt class="col-sm-3">Fecha Registro:</dt>
-            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-3 text-white">Fecha Registro:</dt>
+            <dd class="col-sm-9 text-white">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
 
-            <dt class="col-sm-3">Estado:</dt>
-            <dd class="col-sm-9">@await Html.PartialAsync("_UserStatusBadge", Model.IsActive ? "Active" : "Suspended")</dd>
+            <dt class="col-sm-3 text-white">Estado:</dt>
+            <dd class="col-sm-9 text-white">@await Html.PartialAsync("_UserStatusBadge", Model.IsActive ? "Active" : "Suspended")</dd>
         </dl>
     </div>
     <div class="card-footer">

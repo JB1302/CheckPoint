@@ -75,16 +75,22 @@ namespace CheckPoint.controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Report model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
             model.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             model.ReporterId = userId;
-            model.Status = string.IsNullOrWhiteSpace(model.Status) ? "Pending" : model.Status;
+            model.Status = "Pending";
+            model.CreatedAt = DateTime.UtcNow;
+
+            ModelState.Remove(nameof(Report.Id));
+            ModelState.Remove(nameof(Report.ReporterId));
+            ModelState.Remove(nameof(Report.Status));
+            ModelState.Remove(nameof(Report.CreatedAt));
+
+            if (!ModelState.IsValid)
+                return View(model);
 
             await _reportService.CreateAsync(model);
 
@@ -94,7 +100,7 @@ namespace CheckPoint.controllers
                 "Report",
                 model.Id);
 
-            return RedirectToAction("Details", new { id = model.Id });
+            return RedirectToAction("Index", "Home");
         }
 
         // Update report status
@@ -135,6 +141,46 @@ namespace CheckPoint.controllers
             }
 
             return RedirectToAction("Details", new { id });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+
+            var report = await _reportService.GetByIdAsync(id);
+            if (report == null)
+                return NotFound();
+
+            return View(report);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Report model)
+        {
+            var existing = await _reportService.GetByIdAsync(model.Id);
+            if (existing == null)
+                return NotFound();
+
+            existing.Status = model.Status;
+
+            await _reportService.UpdateAsync(model.Id, existing);
+
+            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(adminUserId))
+            {
+                await _auditLogService.LogAsync(
+                    adminUserId,
+                    "EditReportStatus",
+                    "Report",
+                    model.Id);
+            }
+
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
     }
 }

@@ -1,24 +1,26 @@
 @model CheckPoint.Models.Reports.Report
 
 <div class="mb-3">
-    <label asp-for="TargetType" class="form-label"></label>
-    <select asp-for="TargetType" class="form-control" required>
+    <label asp-for="TargetType" class="form-label text-white"></label>
+    <select asp-for="TargetType" class="form-control text-white bg-dark border-secondary" required>
         <option value="">Selecciona un tipo</option>
         <option value="User">Usuario</option>
         <option value="Post">Publicación</option>
         <option value="Comment">Comentario</option>
         <option value="Event">Evento</option>
     </select>
+    <span asp-validation-for="TargetType" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
-    <label asp-for="TargetId" class="form-label">ID del contenido reportado</label>
-    <input asp-for="TargetId" class="form-control" required />
-    <small class="form-text text-muted">Ingresa el ID del usuario, publicación, comentario o evento que estás reportando.</small>
+    <label asp-for="TargetId" class="form-label text-white">ID del contenido reportado</label>
+    <input asp-for="TargetId" class="form-control text-white bg-dark border-secondary" required />
+    <small class="form-text text-white">Ingresa el ID del usuario, publicación, comentario o evento que estás reportando.</small>
+    <span asp-validation-for="TargetId" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
-    <label asp-for="Description" class="form-label"></label>
-    <textarea asp-for="Description" class="form-control" rows="5" required></textarea>
-    <span asp-validation-for="Description" class="text-danger"></span>
+    <label asp-for="Reason" class="form-label text-white"></label>
+    <textarea asp-for="Reason" class="form-control text-white bg-dark border-secondary" rows="5" required></textarea>
+    <span asp-validation-for="Reason" class="text-danger"></span>
 </div>

@@ -45,5 +45,10 @@ namespace CheckPoint.Services
 
             await _reports.UpdateOneAsync(r => r.Id == id, update);
         }
+
+        public async Task UpdateAsync(string id, Report report)
+        {
+            await _reports.ReplaceOneAsync(x => x.Id == id, report);
+        }
     }
 }

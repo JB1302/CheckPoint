@@ -1,8 +1,15 @@
-@model List<CheckPoint.ViewModels.RegistrationViewModel>
+@model IEnumerable<CheckPoint.Models.Registrations.Registration>
 @{
     ViewData["Title"] = "Mis Registros";
 }
 
-<h1>Mis Registros</h1>
+<h1 class="text-white">Mis Registros</h1>
 
-@await Html.PartialAsync("_RegistrationTable", Model)
+<div class="card bg-dark text-white">
+    <div class="card-header text-white">
+        <h5 class="mb-0 text-white">Participantes (@Model.Count())</h5>
+    </div>
+    <div class="card-body text-white">
+        @await Html.PartialAsync("_RegistrationTable", Model)
+    </div>
+</div>

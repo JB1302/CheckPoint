@@ -3,9 +3,10 @@
     ViewData["Title"] = "Crear Reporte";
 }
 
-<h1>Crear Reporte</h1>
+<h1 class="text-white">Crear Reporte</h1>
 
 <form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
     @await Html.PartialAsync("_ReportForm", Model)
     
     <div class="mt-3">

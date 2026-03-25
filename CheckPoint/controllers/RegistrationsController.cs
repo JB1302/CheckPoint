@@ -127,7 +127,7 @@ namespace CheckPoint.controllers
             if (string.IsNullOrWhiteSpace(eventId))
                 return BadRequest();
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
@@ -143,7 +143,7 @@ namespace CheckPoint.controllers
                 "Registration",
                 registration.Id);
 
-            return RedirectToAction("Details", "Events", new { id = eventId });
+            return RedirectToAction(nameof(MyRegistrations));
         }
 
         // Change registration status (organizer/admin)

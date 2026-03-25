@@ -7,11 +7,12 @@
 
 <div class="row">
     <div class="col-md-12">
-        @if (User.Identity?.IsAuthenticated ?? false)
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             <div class="card mb-4 bg-dark text-white border-secondary">
-                <div class="card-body text-white">
+                <div class="card-body">
                     <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="eventId" value="@ViewBag.EventId" />
                         <textarea name="content" class="form-control mb-2 text-white bg-dark border-secondary" rows="3" placeholder="Escribe una publicación..."></textarea>
                         <button type="submit" class="btn btn-primary">Publicar</button>
@@ -19,7 +20,7 @@
                 </div>
             </div>
         }
-        
+
         <div class="posts-list">
             @foreach (var post in Model)
             {

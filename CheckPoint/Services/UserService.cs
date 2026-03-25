@@ -28,8 +28,10 @@ namespace CheckPoint.Services
         public async Task CreateAsync(User user) =>
             await _users.InsertOneAsync(user);
 
-        public async Task UpdateAsync(string id, User user) =>
-            await _users.ReplaceOneAsync(u => u.Id == id, user);
+        public async Task UpdateAsync(string id, User user)
+        {
+            await _users.ReplaceOneAsync(x => x.Id == id, user);
+        }
 
         public async Task<bool> ExistsByEmailAsync(string email) =>
             await _users.Find(u => u.Email == email).AnyAsync();

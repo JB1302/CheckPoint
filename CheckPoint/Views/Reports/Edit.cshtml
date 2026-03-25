@@ -1,0 +1,48 @@
+@model CheckPoint.Models.Reports.Report
+@{
+    ViewData["Title"] = "Editar Reporte";
+}
+
+<h1 class="text-white">Editar Estado del Reporte</h1>
+
+<div class="card bg-dark text-white border-secondary">
+    <div class="card-body">
+        <dl class="row text-white mb-4">
+            <dt class="col-sm-3 text-white">Tipo:</dt>
+            <dd class="col-sm-9 text-white">@Model.TargetType</dd>
+
+            <dt class="col-sm-3 text-white">Contenido reportado ID:</dt>
+            <dd class="col-sm-9 text-white">@Model.TargetId</dd>
+
+            <dt class="col-sm-3 text-white">Motivo:</dt>
+            <dd class="col-sm-9 text-white">@Model.Reason</dd>
+
+            <dt class="col-sm-3 text-white">Reportado por:</dt>
+            <dd class="col-sm-9 text-white">@Model.ReporterId</dd>
+
+            <dt class="col-sm-3 text-white">Fecha Reporte:</dt>
+            <dd class="col-sm-9 text-white">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label text-white"></label>
+                <select asp-for="Status" class="form-control text-white bg-dark border-secondary">
+                    <option value="Pending">Pendiente</option>
+                    <option value="Reviewed">Revisado</option>
+                    <option value="Resolved">Resuelto</option>
+                    <option value="Rejected">Rechazado</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

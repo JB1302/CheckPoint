@@ -15,7 +15,7 @@
 
         @if (User.Identity?.IsAuthenticated ?? false)
         {
-            <a class="nav-link" asp-controller="Posts" asp-action="ByEvent">Publicaciones</a>
+            <a class="nav-link" asp-controller="Posts" asp-action="Index">Publicaciones</a>
             <a class="nav-link" asp-controller="Registrations" asp-action="MyRegistrations">Mis inscripciones</a>
             <a class="nav-link" asp-controller="Notifications" asp-action="Index">Notificaciones</a>
             <a class="nav-link" asp-controller="Users" asp-action="MyAccount">Mi cuenta</a>

@@ -23,6 +23,14 @@ namespace CheckPoint.controllers
             _auditLogService = auditLogService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var posts = await _postService.GetAllAsync();
+            ViewBag.EventTitle = "Todas las publicaciones";
+            return View(posts);
+        }
+
         // Show posts for an event
         [HttpGet]
         public async Task<IActionResult> ByEvent(string eventId)
@@ -30,16 +38,12 @@ namespace CheckPoint.controllers
             if (string.IsNullOrWhiteSpace(eventId))
                 return BadRequest();
 
-            var ev = await _eventsService.GetByIdAsync(eventId);
-            if (ev == null)
-                return NotFound();
-
             var posts = await _postService.GetByEventIdAsync(eventId);
 
             ViewBag.EventId = eventId;
-            ViewBag.EventTitle = ev.Title;
+            ViewBag.EventTitle = eventId;
 
-            return View(posts);
+            return View("Index", posts);
         }
 
         // Show create post form
