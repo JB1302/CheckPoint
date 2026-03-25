@@ -9,18 +9,36 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="bootstrap" Version="5.3.8" />
-		<PackageReference Include="MongoDB.Driver" Version="3.7.0" />
-		<PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+	  <Compile Remove="Views\Comments\**" />
+	  <Compile Remove="Views\EventRules\**" />
+	  <Compile Remove="Views\Posts\**" />
+	  <Compile Remove="Views\Profiles\**" />
+	  <Compile Remove="Views\Reactions\**" />
+	  <Compile Remove="Views\Registrations\**" />
+	  <Content Remove="Views\Comments\**" />
+	  <Content Remove="Views\EventRules\**" />
+	  <Content Remove="Views\Posts\**" />
+	  <Content Remove="Views\Profiles\**" />
+	  <Content Remove="Views\Reactions\**" />
+	  <Content Remove="Views\Registrations\**" />
+	  <EmbeddedResource Remove="Views\Comments\**" />
+	  <EmbeddedResource Remove="Views\EventRules\**" />
+	  <EmbeddedResource Remove="Views\Posts\**" />
+	  <EmbeddedResource Remove="Views\Profiles\**" />
+	  <EmbeddedResource Remove="Views\Reactions\**" />
+	  <EmbeddedResource Remove="Views\Registrations\**" />
+	  <None Remove="Views\Comments\**" />
+	  <None Remove="Views\EventRules\**" />
+	  <None Remove="Views\Posts\**" />
+	  <None Remove="Views\Profiles\**" />
+	  <None Remove="Views\Reactions\**" />
+	  <None Remove="Views\Registrations\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Views\EventRules\" />
-	  <Folder Include="Views\Comments\" />
-	  <Folder Include="Views\Posts\" />
-	  <Folder Include="Views\Profiles\" />
-	  <Folder Include="Views\Reactions\" />
-	  <Folder Include="Views\Registrations\" />
+		<PackageReference Include="bootstrap" Version="5.3.8" />
+		<PackageReference Include="MongoDB.Driver" Version="3.7.0" />
+		<PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
 	</ItemGroup>
 
 </Project>
