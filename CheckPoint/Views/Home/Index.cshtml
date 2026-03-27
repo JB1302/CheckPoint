@@ -55,9 +55,12 @@
     {
         <div class="card bg-dark border-secondary text-center p-5">
             <p class="text-secondary mb-3">No hay eventos disponibles por ahora.</p>
-            <a asp-controller="Events" asp-action="Create" class="btn btn-warning">
-                Crear primer evento
-            </a>
+            @if (User.IsInRole("Organizer") || User.IsInRole("Admin"))
+            {
+                <a asp-controller="Events" asp-action="Create" class="btn btn-warning">
+                    Crear primer evento
+                </a>
+            }
         </div>
     }
     else

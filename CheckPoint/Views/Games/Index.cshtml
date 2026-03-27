@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Juegos";
+    var canManageGames = User.IsInRole("Admin");
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
@@ -8,7 +9,10 @@
         <h2 class="text-warning mb-1">Juegos</h2>
         <p class="text-secondary mb-0">Administra y consulta el catálogo de juegos disponibles.</p>
     </div>
-    <button class="btn btn-warning" onclick="abrirModalCrear()">Agregar juego</button>
+    @if (canManageGames)
+    {
+        <button class="btn btn-warning" onclick="abrirModalCrear()">Agregar juego</button>
+    }
 </div>
 
 <div class="card bg-dark border-secondary shadow-sm">
@@ -24,7 +28,10 @@
                         <th>Género</th>
                         <th>Plataformas</th>
                         <th>Estado</th>
-                        <th class="text-end">Acciones</th>
+                        @if (canManageGames)
+                        {
+                            <th class="text-end">Acciones</th>
+                        }
                     </tr>
                 </thead>
                 <tbody id="tablaJuegos"></tbody>
@@ -125,14 +132,14 @@
                     <td>${j.genre}</td>
                     <td>${plataformas}</td>
                     <td>${estadoBadge}</td>
-                    <td class="text-end">
+                    ${canManageGames ? `<td class="text-end">
                         <button class="btn btn-sm btn-outline-warning me-1" onclick="abrirModalEditar('${j.id}','${escapar(j.name)}','${escapar(j.genre)}','${escapar((j.platforms||[]).join(', '))}',${j.isActive})">
                             Editar
                         </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="abrirModalEliminar('${j.id}','${escapar(j.name)}')">
                             Eliminar
                         </button>
-                    </td>
+                    </td>` : ''}
                 </tr>`;
         });
     }
@@ -212,6 +219,7 @@
         cargarJuegos();
     }
 
+    const canManageGames = @(canManageGames ? "true" : "false");
     cargarJuegos();
 </script>
 }

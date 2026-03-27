@@ -1,4 +1,8 @@
 <div class="d-flex flex-column h-100">
+    @{ 
+        var canManageEvents = User.IsInRole("Organizer") || User.IsInRole("Admin");
+    }
+
     <div class="mb-4">
         <a asp-controller="Home" asp-action="Index" class="cp-brand">
             CheckPoint
@@ -19,7 +23,10 @@
             <a class="nav-link" asp-controller="Registrations" asp-action="MyRegistrations">Mis inscripciones</a>
             <a class="nav-link" asp-controller="Notifications" asp-action="Index">Notificaciones</a>
             <a class="nav-link" asp-controller="Users" asp-action="MyAccount">Mi cuenta</a>
-            <a class="nav-link" asp-controller="Reports" asp-action="Create">Crear reporte</a>
+            @if (canManageEvents)
+            {
+                <a class="nav-link" asp-controller="Reports" asp-action="Create">Crear reporte</a>
+            }
         }
 
         @if (User.IsInRole("Admin"))
@@ -40,9 +47,12 @@
         {
             <div class="text-uppercase text-secondary small mb-2">Accesos rápidos</div>
             <div class="d-grid gap-2">
-                <a asp-controller="Events" asp-action="Create" class="btn btn-warning btn-sm">Nuevo evento</a>
-                <a asp-controller="Posts" asp-action="Create" class="btn btn-outline-light btn-sm">Nueva publicación</a>
-                <a asp-controller="Reports" asp-action="Create" class="btn btn-outline-danger btn-sm">Crear reporte</a>
+                @if (canManageEvents)
+                {
+                    <a asp-controller="Events" asp-action="Create" class="btn btn-warning btn-sm">Nuevo evento</a>
+                    <a asp-controller="Posts" asp-action="Create" class="btn btn-outline-light btn-sm">Nueva publicación</a>
+                    <a asp-controller="Reports" asp-action="Create" class="btn btn-outline-danger btn-sm">Crear reporte</a>
+                }
             </div>
         }
         else

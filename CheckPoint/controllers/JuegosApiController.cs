@@ -1,5 +1,6 @@
 using CheckPoint.Models.Games;
 using CheckPoint.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckPoint.Controllers
@@ -60,6 +61,7 @@ namespace CheckPoint.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGameRequest request)
         {
@@ -84,6 +86,7 @@ namespace CheckPoint.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateGameRequest request)
         {
@@ -115,6 +118,7 @@ namespace CheckPoint.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {

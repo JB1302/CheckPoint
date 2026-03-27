@@ -1,6 +1,8 @@
 using CheckPoint.Models.Events;
 using CheckPoint.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CheckPoint.Controllers
 {
@@ -74,11 +76,16 @@ namespace CheckPoint.Controllers
             }
         }
 
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEventRequest request)
         {
             try
             {
+                var organizerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrWhiteSpace(organizerId))
+                    return Forbid();
+
                 var evento = new Events
                 {
                     Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
@@ -91,7 +98,7 @@ namespace CheckPoint.Controllers
                     Location = request.Location,
                     OnlineLink = request.OnlineLink,
                     MaxParticipants = request.MaxParticipants,
-                    OrganizerId = request.OrganizerId,
+                    OrganizerId = organizerId,
                     Status = request.Status ?? "Published"
                 };
 
@@ -105,6 +112,7 @@ namespace CheckPoint.Controllers
             }
         }
 
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateEventRequest request)
         {
@@ -154,6 +162,7 @@ namespace CheckPoint.Controllers
             }
         }
 
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {

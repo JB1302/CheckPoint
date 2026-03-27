@@ -57,6 +57,7 @@ namespace CheckPoint.controllers
         }
 
         // Show create report form
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpGet]
         public IActionResult Create(string? targetType = null, string? targetId = null)
         {
@@ -71,6 +72,7 @@ namespace CheckPoint.controllers
         }
 
         // Save new report
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Report model)

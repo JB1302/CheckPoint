@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Eventos";
+    var canManageEvents = User.IsInRole("Organizer") || User.IsInRole("Admin");
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
@@ -8,7 +9,10 @@
         <h2 class="text-warning mb-1">Eventos</h2>
         <p class="text-secondary mb-0">Explora y administra los eventos de la plataforma.</p>
     </div>
-    <button class="btn btn-warning" onclick="abrirModalCrear()">Crear evento</button>
+    @if (canManageEvents)
+    {
+        <button class="btn btn-warning" onclick="abrirModalCrear()">Crear evento</button>
+    }
 </div>
 
 <!-- Filtros -->
@@ -225,6 +229,7 @@
                                 ${link}
                             </div>
                         </div>
+                        ${canManageEvents ? `
                         <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-end gap-2">
                             <button class="btn btn-sm btn-outline-warning"
                                 onclick="abrirModalEditar('${ev.id}')">
@@ -234,7 +239,7 @@
                                 onclick="abrirModalEliminar('${ev.id}','${escapar(ev.title)}')">
                                 Eliminar
                             </button>
-                        </div>
+                        </div>` : ''}
                     </div>
                 </div>`;
         });
@@ -371,6 +376,7 @@
         cargarDatos();
     }
 
+    const canManageEvents = @(canManageEvents ? "true" : "false");
     cargarDatos();
 </script>
 }
