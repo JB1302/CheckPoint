@@ -12,6 +12,11 @@ namespace CheckPoint.Services
             _reactions = context.Reactions;
         }
 
+        public async Task<List<Reaction>> GetAllAsync()
+        {
+            return await _reactions.Find(_ => true).ToListAsync();
+        }
+
         public async Task<long> CountByTargetAsync(string targetId, string targetType)
         {
             return await _reactions.CountDocumentsAsync(r => r.TargetId == targetId && r.TargetType == targetType);

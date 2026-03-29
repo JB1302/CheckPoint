@@ -12,6 +12,11 @@ namespace CheckPoint.Services
             _registrations = context.Registrations;
         }
 
+        public async Task<List<Registration>> GetAllAsync()
+        {
+            return await _registrations.Find(_ => true).ToListAsync();
+        }
+
         public async Task<List<Registration>> GetByEventIdAsync(string eventId)
         {
             return await _registrations.Find(r => r.EventId == eventId).ToListAsync();

@@ -12,6 +12,11 @@ namespace CheckPoint.Services
             _eventRules = context.EventRules;
         }
 
+        public async Task<List<EventRules>> GetAllAsync()
+        {
+            return await _eventRules.Find(_ => true).ToListAsync();
+        }
+
         public async Task<EventRules?> GetByEventIdAsync(string eventId)
         {
             return await _eventRules.Find(r => r.EventId == eventId)

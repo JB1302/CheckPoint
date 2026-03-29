@@ -12,6 +12,11 @@ namespace CheckPoint.Services
             _comments = context.Comments;
         }
 
+        public async Task<List<Comment>> GetAllAsync()
+        {
+            return await _comments.Find(_ => true).ToListAsync();
+        }
+
         public async Task<List<Comment>> GetByPostIdAsync(string postId)
         {
             return await _comments.Find(c => c.PostId == postId && !c.IsDeleted)

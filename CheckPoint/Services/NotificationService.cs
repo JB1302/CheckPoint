@@ -12,6 +12,11 @@ namespace CheckPoint.Services
             _notifications = context.Notifications;
         }
 
+        public async Task<List<Notification>> GetAllAsync()
+        {
+            return await _notifications.Find(_ => true).ToListAsync();
+        }
+
         public async Task<List<Notification>> GetByUserIdAsync(string userId)
         {
             return await _notifications.Find(n => n.UserId == userId)
