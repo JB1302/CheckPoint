@@ -2,6 +2,10 @@
 
 <form asp-controller="Comments" asp-action="Create" method="post" class="mt-2">
     <input type="hidden" name="postId" value="@Model" />
+    @if (ViewData["EventId"] is string eventId && !string.IsNullOrWhiteSpace(eventId))
+    {
+        <input type="hidden" name="eventId" value="@eventId" />
+    }
     <div class="input-group">
         <input type="text" name="content" class="form-control text-white bg-dark border-secondary" placeholder="Escribe un comentario..." required />
         <button type="submit" class="btn btn-primary">Comentar</button>

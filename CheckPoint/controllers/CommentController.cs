@@ -41,11 +41,12 @@ namespace CheckPoint.controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string postId, string eventId, string content)
         {
-            if (string.IsNullOrWhiteSpace(postId) ||
-                string.IsNullOrWhiteSpace(eventId) ||
-                string.IsNullOrWhiteSpace(content))
+            if (string.IsNullOrWhiteSpace(postId) || string.IsNullOrWhiteSpace(content))
             {
-                return RedirectToAction("Details", "Events", new { id = eventId });
+                if (!string.IsNullOrWhiteSpace(eventId))
+                    return RedirectToAction("Details", "Events", new { id = eventId });
+
+                return BadRequest();
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -55,6 +56,9 @@ namespace CheckPoint.controllers
             var post = await _postService.GetByIdAsync(postId);
             if (post == null)
                 return NotFound();
+
+            if (string.IsNullOrWhiteSpace(eventId))
+                eventId = post.EventId;
 
             await _commentService.CreateAsync(new Comment
             {
@@ -86,12 +90,18 @@ namespace CheckPoint.controllers
             var post = await _postService.GetByIdAsync(comment.PostId);
             var ev = post != null ? await _eventService.GetByIdAsync(post.EventId) : null;
 
+            if (string.IsNullOrWhiteSpace(eventId))
+                eventId = ev?.Id;
+
             if (comment.AuthorId != userId && ev?.OrganizerId != userId && !User.IsInRole("Admin"))
                 return Forbid();
 
             await _commentService.SoftDeleteAsync(id);
 
-            return RedirectToAction("Details", "Events", new { id = eventId });
+            if (!string.IsNullOrWhiteSpace(eventId))
+                return RedirectToAction("Details", "Events", new { id = eventId });
+
+            return RedirectToAction("Index", "Events");
         }
     }
 }

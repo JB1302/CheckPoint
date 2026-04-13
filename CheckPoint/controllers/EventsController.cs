@@ -16,6 +16,7 @@ namespace CheckPoint.controllers
         private readonly PostService _postService;
         private readonly RegistrationService _registrationService;
         private readonly AuditLogService _auditLogService;
+        private readonly CommentService _commentService;
 
         public EventsController(
             EventsService eventsService,
@@ -23,7 +24,8 @@ namespace CheckPoint.controllers
             EventRulesService eventRulesService,
             PostService postService,
             RegistrationService registrationService,
-            AuditLogService auditLogService)
+            AuditLogService auditLogService,
+            CommentService commentService)
         {
             _eventsService = eventsService;
             _gameService = gameService;
@@ -31,6 +33,7 @@ namespace CheckPoint.controllers
             _postService = postService;
             _registrationService = registrationService;
             _auditLogService = auditLogService;
+            _commentService = commentService;
         }
 
         // Show public events with filters
@@ -63,6 +66,13 @@ namespace CheckPoint.controllers
             var rules = await _eventRulesService.GetByEventIdAsync(ev.Id);
             var posts = await _postService.GetByEventIdAsync(ev.Id);
             var registrations = await _registrationService.GetByEventIdAsync(ev.Id);
+
+            foreach (var post in posts)
+            {
+                post.Comments = await _commentService.GetByPostIdAsync(post.Id);
+            }
+
+            ViewBag.EventId = ev.Id;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

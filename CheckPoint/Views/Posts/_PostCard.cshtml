@@ -17,8 +17,9 @@
         {
             <button class="btn btn-sm btn-link text-white" onclick="toggleComments('@Model.Id')">Comentarios</button>
             <div id="comments-@Model.Id" style="display:none;" class="mt-3 text-white">
-                @await Html.PartialAsync("~/Views/Comments/_CommentList.cshtml", Model.Comments)
-                @await Html.PartialAsync("~/Views/Comments/_CommentForm.cshtml", Model.Id)
+                @{ var commentViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData) { ["EventId"] = Model.EventId }; }
+                @await Html.PartialAsync("~/Views/Comments/_CommentList.cshtml", Model.Comments, commentViewData)
+                @await Html.PartialAsync("~/Views/Comments/_CommentForm.cshtml", Model.Id, commentViewData)
             </div>
         }
         
