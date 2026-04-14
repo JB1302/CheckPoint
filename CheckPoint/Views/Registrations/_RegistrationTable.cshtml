@@ -24,13 +24,14 @@
                     <td>
                         @if (registration.Status == "Confirmed")
                         {
-                            <form asp-controller="Registrations" asp-action="Cancel" method="post">
+                            <form id="formCancelar-@registration.Id" asp-controller="Registrations" asp-action="Cancel" method="post">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="eventId" value="@registration.EventId" />
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Cancelar registro?')">
-                                    Cancelar
-                                </button>
                             </form>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    onclick="var m=document.getElementById('modalCancelar-@registration.Id');document.body.appendChild(m);bootstrap.Modal.getOrCreateInstance(m).show()">
+                                Cancelar
+                            </button>
                         }
                     </td>
                 </tr>
@@ -38,3 +39,30 @@
         </tbody>
     </table>
 </div>
+
+@foreach (var registration in Model)
+{
+    if (registration.Status == "Confirmed")
+    {
+        <div class="modal" id="modalCancelar-@registration.Id" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title">Cancelar Registro</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas cancelar tu registro en este evento?
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                        <button type="button" class="btn btn-danger"
+                                onclick="document.getElementById('formCancelar-@registration.Id').submit()">
+                            Sí, cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

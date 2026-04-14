@@ -15,9 +15,17 @@
         <h1>@Model.Title</h1>
         <p class="lead">@Model.Description</p>
 
-        <div class="card mb-4">
+        <div class="card mb-4 bg-dark text-white">
             <div class="card-body">
-                <h5>Detalles del Evento</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Detalles del Evento</h5>
+                    @if (User.IsInRole("Admin") || Model.IsUserOrganizer)
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                            Editar Evento
+                        </a>
+                    }
+                </div>
                 <p><strong>Juego:</strong> @Model.GameName</p>
                 <p><strong>Fecha y Hora:</strong> @Model.EventDate.ToString("dd/MM/yyyy HH:mm")</p>
                 <p><strong>Ubicación:</strong> @Model.Location</p>

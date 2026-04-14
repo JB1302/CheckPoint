@@ -16,17 +16,40 @@
             }
             else
             {
-                <form asp-controller="Registrations" asp-action="Cancel" method="post">
+                <button type="button" class="btn btn-danger w-100 mb-2"
+                        onclick="var m=document.getElementById('modalCancelarRegistro');document.body.appendChild(m);bootstrap.Modal.getOrCreateInstance(m).show()">
+                    Cancelar Registro
+                </button>
+
+                <form id="formCancelarRegistro" asp-controller="Registrations" asp-action="Cancel" method="post">
                     <input type="hidden" name="eventId" value="@Model.Id" />
-                    <button type="submit" class="btn btn-danger w-100 mb-2">Cancelar Registro</button>
                 </form>
             }
+
+            <a asp-controller="Registrations" asp-action="MyRegistrations" class="btn btn-outline-info w-100 mb-2">
+                Mis Eventos
+            </a>
         }
-        
-        @if (User.IsInRole("Admin") || Model.IsUserOrganizer)
-        {
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-100 mb-2">Editar Evento</a>
-            <a asp-action="MyEvents" class="btn btn-info w-100">Mis Eventos</a>
-        }
+
+    </div>
+</div>
+
+<div class="modal" id="modalCancelarRegistro" tabindex="-1" aria-labelledby="modalCancelarRegistroLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="modalCancelarRegistroLabel">Cancelar Registro</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas cancelar tu registro en este evento? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                <button type="button" class="btn btn-danger" onclick="document.getElementById('formCancelarRegistro').submit()">
+                    Sí, cancelar registro
+                </button>
+            </div>
+        </div>
     </div>
 </div>
