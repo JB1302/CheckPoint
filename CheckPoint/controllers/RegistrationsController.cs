@@ -77,7 +77,7 @@ namespace CheckPoint.controllers
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            if (ev.Status != "Open")
+            if (ev.Status == "Cancelled" || ev.Status == "Closed")
                 return RedirectToAction("Details", "Events", new { id = eventId });
 
             var alreadyRegistered = await _registrationService.IsRegisteredAsync(eventId, userId);

@@ -180,7 +180,7 @@ namespace CheckPoint.controllers
                 OnlineLink = model.StreamUrl,
                 MaxParticipants = model.MaxParticipants,
                 OrganizerId = userId,
-                Status = "Open"
+                Status = "Published"
             };
 
             await _eventsService.CreateAsync(ev);
@@ -249,6 +249,8 @@ namespace CheckPoint.controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (existing.OrganizerId != userId && !User.IsInRole("Admin"))
                 return Forbid();
+
+            ModelState.Remove(nameof(model.StreamUrl));
 
             if (!ModelState.IsValid)
             {
