@@ -24,6 +24,8 @@ builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<CommentService>();
 builder.Services.AddScoped<ReactionService>();
 builder.Services.AddScoped<NotificationService>();
+// SignalR for realtime notifications
+builder.Services.AddSignalR();
 builder.Services.AddScoped<ReportService>();
 builder.Services.AddScoped<AuditLogService>();
 
@@ -46,6 +48,14 @@ using (var scope = app.Services.CreateScope())
 {
     var userService = scope.ServiceProvider.GetRequiredService<UserService>();
     var profileService = scope.ServiceProvider.GetRequiredService<ProfileService>();
+
+    await SembrarUsuarioDemoAsync(
+    userService,
+    profileService,
+    username: "admin",
+    email: "admin@checkpoint.local",
+    role: "Admin",
+    passwordPlano: "Admin123!");
 
     await SembrarUsuarioDemoAsync(
         userService,
@@ -79,6 +89,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Map SignalR hub
+app.MapHub<CheckPoint.Hubs.NotificationsHub>("/notificationsHub");
 
 app.Run();
 

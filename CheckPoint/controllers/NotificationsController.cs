@@ -10,10 +10,13 @@ namespace CheckPoint.controllers
     public class NotificationsController : Controller
     {
         private readonly NotificationService _notificationService;
+        private readonly Microsoft.AspNetCore.SignalR.IHubContext<CheckPoint.Hubs.NotificationsHub> _hubContext;
 
-        public NotificationsController(NotificationService notificationService)
+        public NotificationsController(NotificationService notificationService,
+            Microsoft.AspNetCore.SignalR.IHubContext<CheckPoint.Hubs.NotificationsHub> hubContext)
         {
             _notificationService = notificationService;
+            _hubContext = hubContext;
         }
 
         // Show current user's notifications
@@ -40,6 +43,30 @@ namespace CheckPoint.controllers
 
             var count = await _notificationService.CountUnreadAsync(userId);
             return Json(new { unreadCount = count });
+        }
+
+        // Partial used by AJAX to refresh the badge
+        [HttpGet]
+        public async Task<IActionResult> Badge()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Content(string.Empty);
+
+            var recent = await _notificationService.GetByUserIdAsync(userId);
+            var vm = recent.Take(5).Select(n => new CheckPoint.ViewModels.NotificationViewModel
+            {
+                Id = n.Id,
+                Title = n.Type,
+                Message = n.Message,
+                CreatedAt = n.CreatedAt,
+                IsRead = n.IsRead
+            }).ToList();
+
+            ViewBag.UnreadNotificationsCount = await _notificationService.CountUnreadAsync(userId);
+            ViewBag.RecentNotifications = vm;
+
+            return PartialView("~/Views/Notifications/_NotificationBadge.cshtml");
         }
 
         // Mark one notification as read

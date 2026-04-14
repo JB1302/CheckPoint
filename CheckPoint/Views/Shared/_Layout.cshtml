@@ -143,8 +143,37 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
 
     @await Html.PartialAsync("_ValidationScriptsPartial")
     @RenderSection("Scripts", required: false)
+    <script>
+        (function () {
+            if (!window.location) return;
+
+            // Create connection to SignalR hub
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl('/notificationsHub')
+                .withAutomaticReconnect()
+                .build();
+
+            connection.on('ReceiveNotification', function (payload) {
+                try {
+                    // Simple handling: reload the badge container to fetch updated partial
+                    const container = document.getElementById('notification-badge-container');
+                    if (container) {
+                        fetch('/Notifications/Badge')
+                            .then(r => r.text())
+                            .then(html => container.innerHTML = html)
+                            .catch(() => console.warn('Could not refresh notifications badge'));
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            });
+
+            connection.start().catch(err => console.warn('SignalR connect error', err));
+        })();
+    </script>
 </body>
 </html>

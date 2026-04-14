@@ -1,4 +1,5 @@
 ﻿using CheckPoint.Models.Events;
+using CheckPoint.Models.Notifications;
 using CheckPoint.Services;
 using CheckPoint.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,8 @@ namespace CheckPoint.controllers
         private readonly AuditLogService _auditLogService;
         private readonly CommentService _commentService;
         private readonly ReactionService _reactionService;
+        private readonly NotificationService _notificationService;
+        private readonly UserService _userService;
 
         public EventsController(
             EventsService eventsService,
@@ -27,7 +30,9 @@ namespace CheckPoint.controllers
             RegistrationService registrationService,
             AuditLogService auditLogService,
             CommentService commentService,
-            ReactionService reactionService)
+            ReactionService reactionService,
+            NotificationService notificationService,
+            UserService userService)
         {
             _eventsService = eventsService;
             _gameService = gameService;
@@ -37,6 +42,8 @@ namespace CheckPoint.controllers
             _auditLogService = auditLogService;
             _commentService = commentService;
             _reactionService = reactionService;
+            _notificationService = notificationService;
+            _userService = userService;
         }
 
         // Show public events with filters
@@ -190,6 +197,41 @@ namespace CheckPoint.controllers
                 "CreateEvent",
                 "Event",
                 ev.Id);
+
+            // 🔥 NOTIFICACIONES
+            var users = await _userService.GetAllAsync();
+
+            foreach (var user in users)
+            {
+                if (user.Id == userId) continue; // opcional: no notificar al creador
+
+                var notification = new Notification
+                {
+                    Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
+                    UserId = user.Id,
+                    Type = "NewEvent",
+                    ReferenceId = ev.Id,
+                    Message = $"Nuevo evento publicado: {ev.Title}"
+                };
+
+                await _notificationService.CreateAsync(notification);
+                // push realtime (if user is connected)
+                try
+                {
+                    var hub = HttpContext.RequestServices.GetService(typeof(Microsoft.AspNetCore.SignalR.IHubContext<CheckPoint.Hubs.NotificationsHub>))
+                        as Microsoft.AspNetCore.SignalR.IHubContext<CheckPoint.Hubs.NotificationsHub>;
+
+                    if (hub != null)
+                    {
+                        // Broadcast to all connected clients; each client will refresh its own badge
+                        await hub.Clients.All.SendCoreAsync("ReceiveNotification", new object[] { new { notification.Id, notification.Type, notification.Message } });
+                    }
+                }
+                catch
+                {
+                    // ignore hub failures — notifications are persisted
+                }
+            }
 
             return RedirectToAction(nameof(Details), new { id = ev.Id });
         }

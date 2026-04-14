@@ -14,6 +14,13 @@
             </form>
 
             @await Html.PartialAsync("_LoginPartial")
+            @* Notification badge *@
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <div id="notification-badge-container">
+                    @await Html.PartialAsync("~/Views/Notifications/_NotificationBadge.cshtml")
+                </div>
+            }
         </div>
     </div>
 </header>
