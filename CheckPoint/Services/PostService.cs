@@ -6,23 +6,39 @@ namespace CheckPoint.Services
     public class PostService
     {
         private readonly IMongoCollection<Post> _posts;
+        private readonly CommentService _commentService;
 
-        public PostService(ContextoMongoDb context)
+        public PostService(ContextoMongoDb context, CommentService commentService)
         {
             _posts = context.Posts;
+            _commentService = commentService;
         }
 
         public async Task<List<Post>> GetByEventIdAsync(string eventId)
         {
-            return await _posts.Find(p => p.EventId == eventId)
-                               .SortByDescending(p => p.CreatedAt)
-                               .ToListAsync();
+            var posts = await _posts.Find(p => p.EventId == eventId)
+                                   .SortByDescending(p => p.CreatedAt)
+                                   .ToListAsync();
+
+            foreach (var post in posts)
+            {
+                post.Comments = await _commentService.GetByPostIdAsync(post.Id) ?? new List<CheckPoint.Models.Comments.Comment>();
+            }
+
+            return posts;
         }
 
         public async Task<Post?> GetByIdAsync(string id)
         {
-            return await _posts.Find(p => p.Id == id)
-                               .FirstOrDefaultAsync();
+            var post = await _posts.Find(p => p.Id == id)
+                                   .FirstOrDefaultAsync();
+
+            if (post != null)
+            {
+                post.Comments = await _commentService.GetByPostIdAsync(post.Id) ?? new List<CheckPoint.Models.Comments.Comment>();
+            }
+
+            return post;
         }
 
         public async Task CreateAsync(Post post)
@@ -41,9 +57,19 @@ namespace CheckPoint.Services
         {
             await _posts.DeleteOneAsync(p => p.Id == id);
         }
+
         public async Task<List<Post>> GetAllAsync()
         {
-            return await _posts.Find(_ => true).ToListAsync();
+            var posts = await _posts.Find(_ => true)
+                                   .SortByDescending(p => p.CreatedAt)
+                                   .ToListAsync();
+
+            foreach (var post in posts)
+            {
+                post.Comments = await _commentService.GetByPostIdAsync(post.Id) ?? new List<CheckPoint.Models.Comments.Comment>();
+            }
+
+            return posts;
         }
     }
 }

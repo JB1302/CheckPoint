@@ -3,6 +3,6 @@
 <div class="comments-list">
     @foreach (var comment in Model)
     {
-        @await Html.PartialAsync("_CommentItem", comment)
+        @await Html.PartialAsync("~/Views/Comments/_CommentItem.cshtml", comment)
     }
 </div>

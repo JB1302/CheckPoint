@@ -57,15 +57,14 @@ namespace CheckPoint.controllers
             if (post == null)
                 return NotFound();
 
-            if (string.IsNullOrWhiteSpace(eventId))
-                eventId = post.EventId;
+            eventId = post.EventId;
 
             await _commentService.CreateAsync(new Comment
             {
                 Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
                 PostId = postId,
                 AuthorId = userId,
-                Content = content
+                Content = content.Trim()
             });
 
             return RedirectToAction("Details", "Events", new { id = eventId });

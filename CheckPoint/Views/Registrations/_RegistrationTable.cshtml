@@ -20,7 +20,7 @@
                         </a>
                     </td>
                     <td>@registration.RegisteredAt.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@await Html.PartialAsync("_RegistrationStatusBadge", registration.Status)</td>
+                    <td>@await Html.PartialAsync("~/Views/Registrations/_RegistrationStatusBadge.cshtml", registration.Status)</td>
                     <td>
                         @if (registration.Status == "Confirmed")
                         {

@@ -1,6 +1,7 @@
 @model string
 
 <form asp-controller="Comments" asp-action="Create" method="post" class="mt-2">
+    @Html.AntiForgeryToken()
     <input type="hidden" name="postId" value="@Model" />
     @if (ViewData["EventId"] is string eventId && !string.IsNullOrWhiteSpace(eventId))
     {

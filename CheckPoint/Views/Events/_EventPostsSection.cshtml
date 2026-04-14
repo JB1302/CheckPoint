@@ -1,25 +1,48 @@
 @model IEnumerable<CheckPoint.Models.Posts.Post>
 
-<div class="card">
-    <div class="card-header">
-        <h5>Publicaciones del Evento</h5>
-    </div>
+@{
+    var enableComments = ViewData["EnableComments"] as bool? ?? true;
+    var enableReactions = ViewData["EnableReactions"] as bool? ?? true;
+    var enableEdit = ViewData["EnableEdit"] as bool? ?? true;
+    var eventId = ViewData["EventId"]?.ToString();
+}
+
+<div class="card mb-4">
     <div class="card-body">
-        @if (User.Identity.IsAuthenticated)
+        <h5>Publicaciones del Evento</h5>
+
+        @if (User.Identity?.IsAuthenticated ?? false)
         {
             <form asp-controller="Posts" asp-action="Create" method="post" class="mb-4">
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="eventId" value="@ViewBag.EventId" />
-                <textarea name="content" class="form-control mb-2" rows="3" placeholder="Escribe algo..."></textarea>
+                <input type="hidden" name="eventId" value="@eventId" />
+                <textarea name="content"
+                          class="form-control mb-2"
+                          rows="3"
+                          placeholder="Escribe algo..."></textarea>
                 <button type="submit" class="btn btn-primary">Publicar</button>
             </form>
         }
-        
-        <div class="posts-list">
-            @foreach (var post in Model)
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var post in Model)
             {
-                @await Html.PartialAsync("_PostCard", post)
+                var postViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
+                {
+                    ["EnableComments"] = enableComments,
+                    ["EnableReactions"] = enableReactions,
+                    ["EnableEdit"] = enableEdit
+                };
+
+                @await Html.PartialAsync("~/Views/Posts/_PostCard.cshtml", post, postViewData)
             }
-        </div>
+        }
+        else
+        {
+            <div class="alert alert-secondary mb-0">
+                No hay publicaciones para este evento todavía.
+            </div>
+        }
     </div>
 </div>

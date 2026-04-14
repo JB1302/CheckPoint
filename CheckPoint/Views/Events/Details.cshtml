@@ -1,13 +1,21 @@
 @model CheckPoint.ViewModels.EventDetailViewModel
 @{
     ViewData["Title"] = Model.Title;
+
+    var postsViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
+    {
+        ["EnableComments"] = true,
+        ["EnableReactions"] = true,
+        ["EnableEdit"] = true,
+        ["EventId"] = Model.Id // o Model.EventId, usa la propiedad real de tu ViewModel
+    };
 }
 
 <div class="row">
     <div class="col-md-8">
         <h1>@Model.Title</h1>
         <p class="lead">@Model.Description</p>
-        
+
         <div class="card mb-4">
             <div class="card-body">
                 <h5>Detalles del Evento</h5>
@@ -19,10 +27,10 @@
                 <p><strong>Participantes Actuales:</strong> @Model.CurrentParticipants</p>
             </div>
         </div>
-        
-        @await Html.PartialAsync("_EventPostsSection", Model.Posts)
+
+        @await Html.PartialAsync("_EventPostsSection", Model.Posts, postsViewData)
     </div>
-    
+
     <div class="col-md-4">
         @await Html.PartialAsync("_EventDetailsSidebar", Model)
         @await Html.PartialAsync("_EventRegistrationsSection", Model.Registrations)
