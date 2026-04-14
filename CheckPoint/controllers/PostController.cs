@@ -26,12 +26,12 @@ namespace CheckPoint.controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var posts = await _postService.GetAllAsync();
+            var posts = await _postService.GetGenericAsync();
             ViewBag.EventTitle = "Todas las publicaciones";
+            ViewBag.IsGeneric = true;
             return View(posts);
         }
 
-        // Show posts for an event
         [HttpGet]
         public async Task<IActionResult> ByEvent(string eventId)
         {
@@ -39,14 +39,15 @@ namespace CheckPoint.controllers
                 return BadRequest();
 
             var posts = await _postService.GetByEventIdAsync(eventId);
+            var ev = await _eventsService.GetByIdAsync(eventId);
 
             ViewBag.EventId = eventId;
-            ViewBag.EventTitle = eventId;
+            ViewBag.EventTitle = ev?.Title ?? eventId;
+            ViewBag.IsGeneric = false;
 
             return View("Index", posts);
         }
 
-        // Show create post form
         [HttpGet]
         public async Task<IActionResult> Create(string eventId)
         {
@@ -58,6 +59,9 @@ namespace CheckPoint.controllers
                 return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Forbid();
+
             if (ev.OrganizerId != userId && !User.IsInRole("Admin"))
                 return Forbid();
 
@@ -69,37 +73,51 @@ namespace CheckPoint.controllers
             return View(model);
         }
 
-        // Save new post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Post model)
+        public async Task<IActionResult> Create(string content, string? eventId)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                if (!string.IsNullOrWhiteSpace(eventId))
+                    return RedirectToAction("Details", "Events", new { id = eventId });
 
-            var ev = await _eventsService.GetByIdAsync(model.EventId);
-            if (ev == null)
-                return NotFound();
+                return RedirectToAction(nameof(Index));
+            }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            model.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
-            model.AuthorId = userId;
+            if (!string.IsNullOrWhiteSpace(eventId))
+            {
+                var ev = await _eventsService.GetByIdAsync(eventId);
+                if (ev == null)
+                    return NotFound();
+            }
 
-            await _postService.CreateAsync(model);
+            var post = new Post
+            {
+                Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
+                AuthorId = userId,
+                Content = content.Trim(),
+                EventId = string.IsNullOrWhiteSpace(eventId) ? string.Empty : eventId
+            };
+
+            await _postService.CreateAsync(post);
 
             await _auditLogService.LogAsync(
                 userId,
                 "CreatePost",
                 "Post",
-                model.Id);
+                post.Id);
 
-            return RedirectToAction("Details", "Events", new { id = model.EventId });
+            if (!string.IsNullOrWhiteSpace(eventId))
+                return RedirectToAction("Details", "Events", new { id = eventId });
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // Show edit post form
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -110,18 +128,28 @@ namespace CheckPoint.controllers
             if (post == null)
                 return NotFound();
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Forbid();
+
+            if (string.IsNullOrWhiteSpace(post.EventId))
+            {
+                if (post.AuthorId != userId && !User.IsInRole("Admin"))
+                    return Forbid();
+
+                return View(post);
+            }
+
             var ev = await _eventsService.GetByIdAsync(post.EventId);
             if (ev == null)
                 return NotFound();
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (post.AuthorId != userId && ev.OrganizerId != userId && !User.IsInRole("Admin"))
                 return Forbid();
 
             return View(post);
         }
 
-        // Save post changes
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, Post model)
@@ -136,18 +164,26 @@ namespace CheckPoint.controllers
             if (existing == null)
                 return NotFound();
 
-            var ev = await _eventsService.GetByIdAsync(existing.EventId);
-            if (ev == null)
-                return NotFound();
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            if (existing.AuthorId != userId && ev.OrganizerId != userId && !User.IsInRole("Admin"))
-                return Forbid();
+            if (string.IsNullOrWhiteSpace(existing.EventId))
+            {
+                if (existing.AuthorId != userId && !User.IsInRole("Admin"))
+                    return Forbid();
+            }
+            else
+            {
+                var ev = await _eventsService.GetByIdAsync(existing.EventId);
+                if (ev == null)
+                    return NotFound();
 
-            existing.Content = model.Content;
+                if (existing.AuthorId != userId && ev.OrganizerId != userId && !User.IsInRole("Admin"))
+                    return Forbid();
+            }
+
+            existing.Content = model.Content?.Trim() ?? existing.Content;
 
             await _postService.UpdateAsync(id, existing);
 
@@ -157,10 +193,12 @@ namespace CheckPoint.controllers
                 "Post",
                 existing.Id);
 
-            return RedirectToAction("Details", "Events", new { id = existing.EventId });
+            if (!string.IsNullOrWhiteSpace(existing.EventId))
+                return RedirectToAction("Details", "Events", new { id = existing.EventId });
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // Delete post
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
@@ -172,16 +210,24 @@ namespace CheckPoint.controllers
             if (post == null)
                 return NotFound();
 
-            var ev = await _eventsService.GetByIdAsync(post.EventId);
-            if (ev == null)
-                return NotFound();
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            if (post.AuthorId != userId && ev.OrganizerId != userId && !User.IsInRole("Admin"))
-                return Forbid();
+            if (string.IsNullOrWhiteSpace(post.EventId))
+            {
+                if (post.AuthorId != userId && !User.IsInRole("Admin"))
+                    return Forbid();
+            }
+            else
+            {
+                var ev = await _eventsService.GetByIdAsync(post.EventId);
+                if (ev == null)
+                    return NotFound();
+
+                if (post.AuthorId != userId && ev.OrganizerId != userId && !User.IsInRole("Admin"))
+                    return Forbid();
+            }
 
             await _postService.DeleteAsync(id);
 
@@ -191,7 +237,10 @@ namespace CheckPoint.controllers
                 "Post",
                 id);
 
-            return RedirectToAction("Details", "Events", new { id = post.EventId });
+            if (!string.IsNullOrWhiteSpace(post.EventId))
+                return RedirectToAction("Details", "Events", new { id = post.EventId });
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

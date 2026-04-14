@@ -14,6 +14,13 @@ namespace CheckPoint.Services
             _commentService = commentService;
         }
 
+        public async Task<List<Post>> GetGenericAsync()
+        {
+            return await _posts.Find(p => string.IsNullOrWhiteSpace(p.EventId))
+                               .SortByDescending(p => p.CreatedAt)
+                               .ToListAsync();
+        }
+
         public async Task<List<Post>> GetByEventIdAsync(string eventId)
         {
             var posts = await _posts.Find(p => p.EventId == eventId)
