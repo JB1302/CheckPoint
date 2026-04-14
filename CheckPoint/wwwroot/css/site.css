@@ -5,8 +5,8 @@
     --cp-bg-soft: #0d1522;
     --cp-surface: #101b2d;
     --cp-surface-2: #13243a;
-    --cp-text: #d7e3f4;
-    --cp-muted: #8da2bd;
+    --cp-text: #e8f1f8;
+    --cp-muted: #e8f1f8;
     --cp-accent: #2dd4ff;
     --cp-accent-2: #3dffb5;
     --cp-danger: #ff5470;
@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5, .navbar-brand {
 }
 
 .navbar .nav-link {
-    color: #c8d5e6 !important;
+    color: var(--cp-text) !important;
 }
 
 .navbar .nav-link:hover {
@@ -81,7 +81,7 @@ h1, h2, h3, h4, h5, .navbar-brand {
     padding: .35rem .7rem;
     border-radius: 999px;
     border: 1px solid rgba(45, 212, 255, 0.38);
-    color: #bff2ff;
+    color: #d5f0ff;
     font-size: .8rem;
     text-transform: uppercase;
     letter-spacing: .08em;
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5, .navbar-brand {
 }
 
 .cp-stat span {
-    color: var(--cp-muted);
+    color: var(--cp-text);
     font-size: .78rem;
 }
 
@@ -128,7 +128,7 @@ h1, h2, h3, h4, h5, .navbar-brand {
 
 .card .badge.bg-warning {
     background-color: rgba(45, 212, 255, 0.18) !important;
-    color: #b9efff !important;
+    color: #d5f0ff !important;
     border: 1px solid rgba(45, 212, 255, 0.4);
 }
 
@@ -146,11 +146,11 @@ h1, h2, h3, h4, h5, .navbar-brand {
 }
 
 .btn-outline-warning {
-    --bs-btn-color: #b9efff;
+    --bs-btn-color: #d5f0ff;
     --bs-btn-border-color: rgba(45, 212, 255, 0.55);
     --bs-btn-hover-bg: rgba(45, 212, 255, 0.12);
     --bs-btn-hover-border-color: #7ee7ff;
-    --bs-btn-hover-color: #d8f7ff;
+    --bs-btn-hover-color: #e5f7ff;
 }
 
 .form-control,
@@ -167,11 +167,11 @@ h1, h2, h3, h4, h5, .navbar-brand {
 }
 
 .text-warning {
-    color: #bff2ff !important;
+    color: #d5f0ff !important;
 }
 
 .text-secondary {
-    color: var(--cp-muted) !important;
+    color: var(--cp-text) !important;
 }
 
 .cp-footer {
@@ -220,7 +220,7 @@ h1, h2, h3, h4, h5, .navbar-brand {
 .cp-badge-soft {
     background: rgba(45, 212, 255, 0.14);
     border: 1px solid rgba(45, 212, 255, 0.35);
-    color: #bbf1ff;
+    color: #d5f0ff;
 }
 
 .cp-metric {
@@ -240,8 +240,30 @@ h1, h2, h3, h4, h5, .navbar-brand {
 }
 
 .cp-metric span {
-    color: var(--cp-muted);
+    color: var(--cp-text);
     font-size: .85rem;
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: var(--cp-text) !important;
+    opacity: 0.85 !important;
+}
+
+.form-control::placeholder,
+.form-select::placeholder,
+textarea::placeholder {
+    color: var(--cp-text) !important;
+    opacity: 0.85 !important;
+}
+
+small,
+.small {
+    color: var(--cp-text) !important;
+}
+
+.text-muted {
+    color: var(--cp-text) !important;
 }
 
 ::-webkit-scrollbar { width: 8px; }
