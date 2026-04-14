@@ -1,7 +1,6 @@
 @model CheckPoint.Models.Posts.Post
 
 @{
-    var enableComments = ViewData["EnableComments"] as bool? ?? true;
     var enableReactions = ViewData["EnableReactions"] as bool? ?? true;
     var enableEdit = ViewData["EnableEdit"] as bool? ?? true;
 }
@@ -22,26 +21,10 @@
             </div>
         }
 
-        @if (enableComments && (User.Identity?.IsAuthenticated ?? false))
-        {
-            <button class="btn btn-sm btn-link text-white" onclick="toggleComments('@Model.Id')">Comentarios</button>
-            <div id="comments-@Model.Id" style="display:none;" class="mt-3 text-white">
-                @{
-                    var commentViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
-                    {
-                        ["EventId"] = Model.EventId
-                    };
-                }
-
-                @await Html.PartialAsync("~/Views/Comments/_CommentList.cshtml", Model.Comments, commentViewData)
-                @await Html.PartialAsync("~/Views/Comments/_CommentForm.cshtml", Model.Id, commentViewData)
-            </div>
-        }
-
-        @if (enableEdit && (User.Identity?.Name == Model.AuthorId || User.IsInRole("Admin")))
+        @if (enableEdit && (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.AuthorId || User.IsInRole("Admin")))
         {
             <div class="float-end">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Editar</a>
+                <a asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Editar</a>
             </div>
         }
     </div>

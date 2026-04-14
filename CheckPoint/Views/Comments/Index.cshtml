@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CheckPoint.Models.Comments.Comment>
+
+@{
+    ViewData["Title"] = "Comentarios";
+}
+
+<h1>Comentarios</h1>
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <form asp-controller="Comments" asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <textarea name="content" class="form-control mb-2" rows="3" placeholder="Escribe un comentario..."></textarea>
+                <button type="submit" class="btn btn-primary">Comentar</button>
+            </form>
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    foreach (var comment in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <strong>@comment.AuthorId</strong>
+                <small class="float-end">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                <p class="mt-2">@comment.Content</p>
+
+                @if (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == comment.AuthorId || User.IsInRole("Admin"))
+                {
+                    <form asp-controller="Comments" asp-action="Delete" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@comment.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-secondary">
+        No hay comentarios todavía.
+    </div>
+}

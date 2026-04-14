@@ -72,7 +72,6 @@ namespace CheckPoint.controllers
 
             foreach (var post in posts)
             {
-                post.Comments = await _commentService.GetByPostIdAsync(post.Id);
                 post.Reactions = await _reactionService.GetByTargetIdAsync(post.Id, "Post");
             }
 

@@ -191,23 +191,37 @@
 
         sinEventos.classList.add('d-none');
 
-        lista.forEach(ev => {
-            const nombreJuego  = mapaJuegos[ev.gameId] || ev.gameId;
-            const inicio       = new Date(ev.startDate).toLocaleString('es-CR');
-            const fin          = new Date(ev.endDate).toLocaleString('es-CR');
-            const descripcion  = (ev.description || '').length > 130
+                lista.forEach(ev => {
+            const nombreJuego = mapaJuegos[ev.gameId] || ev.gameId;
+            const inicio = new Date(ev.startDate).toLocaleString('es-CR');
+            const fin = new Date(ev.endDate).toLocaleString('es-CR');
+            const descripcion = (ev.description || '').length > 130
                 ? ev.description.substring(0, 130) + '...'
                 : (ev.description || 'Sin descripción.');
 
             const estadoColor = ev.status === 'Published' ? 'bg-success'
-                              : ev.status === 'Open'      ? 'bg-primary'
+                              : ev.status === 'Open' ? 'bg-primary'
                               : 'bg-secondary';
 
             const ubicacion = ev.location
                 ? `<div><strong>Ubicación:</strong> ${ev.location}</div>`
                 : '';
+
             const link = ev.onlineLink
                 ? `<div><a href="${ev.onlineLink}" target="_blank" class="text-warning small">Ver enlace online</a></div>`
+                : '';
+
+            const botonesGestion = canManageEvents
+                ? `
+                    <button class="btn btn-sm btn-outline-warning"
+                        onclick="abrirModalEditar('${ev.id}')">
+                        Editar
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger"
+                        onclick="abrirModalEliminar('${ev.id}','${escapar(ev.title)}')">
+                        Eliminar
+                    </button>
+                  `
                 : '';
 
             contenedor.innerHTML += `
@@ -229,17 +243,12 @@
                                 ${link}
                             </div>
                         </div>
-                        ${canManageEvents ? `
                         <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-end gap-2">
-                            <button class="btn btn-sm btn-outline-warning"
-                                onclick="abrirModalEditar('${ev.id}')">
-                                Editar
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger"
-                                onclick="abrirModalEliminar('${ev.id}','${escapar(ev.title)}')">
-                                Eliminar
-                            </button>
-                        </div>` : ''}
+                            <a class="btn btn-sm btn-outline-info" href="/Events/Details/${ev.id}">
+                                Details
+                            </a>
+                            ${botonesGestion}
+                        </div>
                     </div>
                 </div>`;
         });
@@ -376,7 +385,7 @@
         cargarDatos();
     }
 
-    const canManageEvents = @(canManageEvents ? "true" : "false");
-    cargarDatos();
+            const canManageEvents = @(canManageEvents ? "true" : "false");
+        cargarDatos();
 </script>
 }

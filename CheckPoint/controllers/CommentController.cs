@@ -7,73 +7,46 @@ using System.Security.Claims;
 namespace CheckPoint.controllers
 {
     [Authorize]
-    public class CommentsController : Controller
+    public class CommentController : Controller
     {
         private readonly CommentService _commentService;
-        private readonly PostService _postService;
-        private readonly EventsService _eventService;
 
-        public CommentsController(
-            CommentService commentService,
-            PostService postService,
-            EventsService eventService)
+        public CommentController(CommentService commentService)
         {
             _commentService = commentService;
-            _postService = postService;
-            _eventService = eventService;
         }
 
-        // /Comments/ByPost?postId=...
         [HttpGet]
-        public async Task<IActionResult> ByPost(string postId)
+        public async Task<IActionResult> Index()
         {
-            if (string.IsNullOrWhiteSpace(postId))
-                return BadRequest();
-
-            var comments = await _commentService.GetByPostIdAsync(postId);
-            ViewBag.PostId = postId;
-
+            var comments = await _commentService.GetAllAsync();
             return View(comments);
         }
 
-        // Crea comentario sobre un post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string postId, string eventId, string content)
+        public async Task<IActionResult> Create(string content)
         {
-            if (string.IsNullOrWhiteSpace(postId) || string.IsNullOrWhiteSpace(content))
-            {
-                if (!string.IsNullOrWhiteSpace(eventId))
-                    return RedirectToAction("Details", "Events", new { id = eventId });
-
-                return BadRequest();
-            }
+            if (string.IsNullOrWhiteSpace(content))
+                return RedirectToAction(nameof(Index));
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            var post = await _postService.GetByIdAsync(postId);
-            if (post == null)
-                return NotFound();
-
-            eventId = post.EventId;
-
             await _commentService.CreateAsync(new Comment
             {
                 Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
-                PostId = postId,
                 AuthorId = userId,
                 Content = content.Trim()
             });
 
-            return RedirectToAction("Details", "Events", new { id = eventId });
+            return RedirectToAction(nameof(Index));
         }
 
-        // Elimina lógicamente un comentario
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id, string eventId)
+        public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
@@ -86,21 +59,12 @@ namespace CheckPoint.controllers
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            var post = await _postService.GetByIdAsync(comment.PostId);
-            var ev = post != null ? await _eventService.GetByIdAsync(post.EventId) : null;
-
-            if (string.IsNullOrWhiteSpace(eventId))
-                eventId = ev?.Id;
-
-            if (comment.AuthorId != userId && ev?.OrganizerId != userId && !User.IsInRole("Admin"))
+            if (comment.AuthorId != userId && !User.IsInRole("Admin"))
                 return Forbid();
 
             await _commentService.SoftDeleteAsync(id);
 
-            if (!string.IsNullOrWhiteSpace(eventId))
-                return RedirectToAction("Details", "Events", new { id = eventId });
-
-            return RedirectToAction("Index", "Events");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

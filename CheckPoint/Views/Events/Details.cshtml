@@ -4,10 +4,9 @@
 
     var postsViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
     {
-        ["EnableComments"] = true,
         ["EnableReactions"] = true,
         ["EnableEdit"] = true,
-        ["EventId"] = Model.Id // o Model.EventId, usa la propiedad real de tu ViewModel
+        ["EventId"] = Model.Id
     };
 }
 

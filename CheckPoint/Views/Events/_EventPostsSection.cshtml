@@ -1,7 +1,6 @@
 @model IEnumerable<CheckPoint.Models.Posts.Post>
 
 @{
-    var enableComments = ViewData["EnableComments"] as bool? ?? true;
     var enableReactions = ViewData["EnableReactions"] as bool? ?? true;
     var enableEdit = ViewData["EnableEdit"] as bool? ?? true;
     var eventId = ViewData["EventId"]?.ToString();
@@ -30,7 +29,6 @@
             {
                 var postViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
                 {
-                    ["EnableComments"] = enableComments,
                     ["EnableReactions"] = enableReactions,
                     ["EnableEdit"] = enableEdit
                 };

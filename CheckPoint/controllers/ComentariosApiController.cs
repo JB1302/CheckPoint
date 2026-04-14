@@ -2,6 +2,7 @@ using CheckPoint.Models.Comments;
 using CheckPoint.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CheckPoint.Controllers
 {
@@ -47,32 +48,24 @@ namespace CheckPoint.Controllers
             }
         }
 
-        [HttpGet("publicacion/{postId}")]
-        public async Task<IActionResult> GetByPostId(string postId)
-        {
-            try
-            {
-                var comentarios = await _commentService.GetByPostIdAsync(postId);
-                return Ok(comentarios);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { mensaje = "Error al obtener los comentarios de la publicación.", detalle = ex.Message });
-            }
-        }
-
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCommentRequest request)
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrWhiteSpace(userId))
+                    return Forbid();
+
+                if (string.IsNullOrWhiteSpace(request.Content))
+                    return BadRequest(new { mensaje = "El contenido es obligatorio." });
+
                 var comentario = new Comment
                 {
                     Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
-                    PostId = request.PostId,
-                    AuthorId = request.AuthorId,
-                    Content = request.Content
+                    AuthorId = userId,
+                    Content = request.Content.Trim()
                 };
 
                 await _commentService.CreateAsync(comentario);
@@ -95,6 +88,13 @@ namespace CheckPoint.Controllers
                 if (existente == null)
                     return NotFound(new { mensaje = "Comentario no encontrado." });
 
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrWhiteSpace(userId))
+                    return Forbid();
+
+                if (existente.AuthorId != userId && !User.IsInRole("Admin"))
+                    return Forbid();
+
                 await _commentService.SoftDeleteAsync(id);
 
                 return Ok(new { mensaje = "Comentario eliminado correctamente." });
@@ -108,8 +108,6 @@ namespace CheckPoint.Controllers
 
     public class CreateCommentRequest
     {
-        public string PostId { get; set; } = string.Empty;
-        public string AuthorId { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
     }
 }
