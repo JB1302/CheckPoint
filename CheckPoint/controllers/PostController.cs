@@ -85,9 +85,6 @@ namespace CheckPoint.controllers
             if (string.IsNullOrWhiteSpace(userId))
                 return Forbid();
 
-            if (ev.OrganizerId != userId && !User.IsInRole("Admin"))
-                return Forbid();
-
             model.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             model.AuthorId = userId;
 

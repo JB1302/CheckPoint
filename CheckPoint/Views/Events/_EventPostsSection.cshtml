@@ -8,6 +8,7 @@
         @if (User.Identity.IsAuthenticated)
         {
             <form asp-controller="Posts" asp-action="Create" method="post" class="mb-4">
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="eventId" value="@ViewBag.EventId" />
                 <textarea name="content" class="form-control mb-2" rows="3" placeholder="Escribe algo..."></textarea>
                 <button type="submit" class="btn btn-primary">Publicar</button>

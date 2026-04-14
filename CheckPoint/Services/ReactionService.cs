@@ -42,6 +42,7 @@ namespace CheckPoint.Services
             {
                 await _reactions.InsertOneAsync(new Reaction
                 {
+                    Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
                     TargetId = targetId,
                     TargetType = targetType,
                     UserId = userId,
@@ -49,6 +50,13 @@ namespace CheckPoint.Services
                     CreatedAt = DateTime.UtcNow
                 });
             }
+        }
+
+        public async Task<List<Reaction>> GetByTargetIdAsync(string targetId, string targetType)
+        {
+            return await _reactions
+                .Find(r => r.TargetId == targetId && r.TargetType == targetType)
+                .ToListAsync();
         }
     }
 }

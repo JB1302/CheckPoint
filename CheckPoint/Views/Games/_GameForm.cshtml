@@ -2,36 +2,24 @@
 
 <div class="mb-3">
     <label asp-for="Name" class="form-label"></label>
-    <input asp-for="Name" class="form-control" required />
+    <input asp-for="Name" class="form-control" placeholder="Ej: Diablo IV" />
     <span asp-validation-for="Name" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
     <label asp-for="Genre" class="form-label"></label>
-    <input asp-for="Genre" class="form-control" required />
+    <input asp-for="Genre" class="form-control" placeholder="Ej: Action RPG" />
+    <span asp-validation-for="Genre" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
-    <label asp-for="Platform" class="form-label"></label>
-    <input asp-for="Platform" class="form-control" required />
+    <label class="form-label">Plataformas <small class="text-muted">(separadas por coma)</small></label>
+    <input type="text" name="platformsInput" class="form-control"
+           value="@string.Join(", ", Model?.Platforms ?? new List<string>())"
+           placeholder="Ej: PC, PS5, Xbox Series X" />
 </div>
 
-<div class="mb-3">
-    <label asp-for="Developer" class="form-label"></label>
-    <input asp-for="Developer" class="form-control" />
-</div>
-
-<div class="mb-3">
-    <label asp-for="ReleaseDate" class="form-label"></label>
-    <input asp-for="ReleaseDate" type="date" class="form-control" />
-</div>
-
-<div class="mb-3">
-    <label asp-for="Description" class="form-label"></label>
-    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-</div>
-
-<div class="mb-3">
-    <label asp-for="CoverImage" class="form-label"></label>
-    <input asp-for="CoverImage" type="file" class="form-control" accept="image/*" />
+<div class="form-check mb-3">
+    <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+    <label asp-for="IsActive" class="form-check-label"></label>
 </div>

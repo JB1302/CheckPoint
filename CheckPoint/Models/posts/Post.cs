@@ -19,7 +19,6 @@ namespace CheckPoint.Models.Posts
         public string EventId { get; set; } = string.Empty;
 
         [BsonElement("authorId")]
-        [Required]
         [DisplayName("Identificador del autor")]
         public string AuthorId { get; set; } = string.Empty;
 
