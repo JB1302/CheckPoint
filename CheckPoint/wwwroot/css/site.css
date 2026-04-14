@@ -261,11 +261,27 @@ small,
 .small {
     color: var(--cp-text) !important;
 }
-
 .text-muted {
     color: var(--cp-text) !important;
 }
 
+.event-details-card,
+.event-details-card .card-body,
+.event-details-card h5,
+.event-details-card p,
+.event-details-card strong {
+    color: var(--cp-text) !important;
+}
+
+.event-post-input,
+.event-post-input:focus {
+    color: var(--cp-text) !important;
+}
+
+.event-post-input::placeholder {
+    color: var(--cp-text) !important;
+    opacity: 0.9 !important;
+}
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #060a11; }
 ::-webkit-scrollbar-thumb { background: #1e314a; border-radius: 10px; }

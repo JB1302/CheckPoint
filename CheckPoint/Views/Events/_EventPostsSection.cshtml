@@ -8,7 +8,7 @@
 
 <div class="card mb-4 bg-dark text-white">
     <div class="card-body">
-        <h5>Publicaciones del Evento</h5>
+        <h5 class="text-light">Publicaciones del Evento</h5>
 
         @if (User.Identity?.IsAuthenticated ?? false)
         {
@@ -16,7 +16,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="eventId" value="@eventId" />
                 <textarea name="content"
-                          class="form-control mb-2"
+                          class="form-control mb-2 text-light event-post-input"
                           rows="3"
                           placeholder="Escribe algo..."></textarea>
                 <button type="submit" class="btn btn-primary">Publicar</button>
@@ -38,7 +38,7 @@
         }
         else
         {
-            <div class="alert alert-secondary mb-0">
+            <div class="alert alert-secondary mb-0 text-dark fw-semibold">
                 No hay publicaciones para este evento todavía.
             </div>
         }

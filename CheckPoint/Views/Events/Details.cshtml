@@ -15,10 +15,10 @@
         <h1>@Model.Title</h1>
         <p class="lead">@Model.Description</p>
 
-        <div class="card mb-4 bg-dark text-white">
+        <div class="card mb-4 bg-dark text-white event-details-card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">Detalles del Evento</h5>
+                    <h5 class="mb-0 text-light">Detalles del Evento</h5>
                     @if (User.IsInRole("Admin") || Model.IsUserOrganizer)
                     {
                         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
@@ -26,12 +26,12 @@
                         </a>
                     }
                 </div>
-                <p><strong>Juego:</strong> @Model.GameName</p>
-                <p><strong>Fecha y Hora:</strong> @Model.EventDate.ToString("dd/MM/yyyy HH:mm")</p>
-                <p><strong>Ubicación:</strong> @Model.Location</p>
-                <p><strong>Organizador:</strong> @Model.OrganizerName</p>
-                <p><strong>Capacidad Máxima:</strong> @Model.MaxParticipants</p>
-                <p><strong>Participantes Actuales:</strong> @Model.CurrentParticipants</p>
+                <p class="text-light"><strong class="text-light">Juego:</strong> @Model.GameName</p>
+                <p class="text-light"><strong class="text-light">Fecha y Hora:</strong> @Model.EventDate.ToString("dd/MM/yyyy HH:mm")</p>
+                <p class="text-light"><strong class="text-light">Ubicación:</strong> @Model.Location</p>
+                <p class="text-light"><strong class="text-light">Organizador:</strong> @Model.OrganizerName</p>
+                <p class="text-light"><strong class="text-light">Capacidad Máxima:</strong> @Model.MaxParticipants</p>
+                <p class="text-light mb-0"><strong class="text-light">Participantes Actuales:</strong> @Model.CurrentParticipants</p>
             </div>
         </div>
 
